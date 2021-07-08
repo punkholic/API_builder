@@ -11,13 +11,16 @@
                 "password" : "hash",
                 "created_at" : "date"
             },
+            "guarded" : ["id", "password"],
+            "fillable" : ["name", "age", "price", "created_at"],
             
             "view": [
                 {
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "GET",
-                        "route" : "/testView"
+                        "route" : "/testView",
+                        "name" : "moreView"
                     }
                 }
             ],
@@ -26,14 +29,16 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/testView2"
+                        "route" : "/testView2",
+                        "name" : "testView1"
                     }
                 },
                 {
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "GET",
-                        "route" : "/testView5"
+                        "route" : "/testView5",
+                        "name" : "testView2"
                     }
                 }
             ],
@@ -43,7 +48,8 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/testView3"
+                        "route" : "/testView3",
+                        "name" : "testView3"
                     }
                 }
             ],
@@ -53,7 +59,76 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/testView4"
+                        "route" : "/testView4",
+                        "name" : "testView4"
+                    }
+                }
+            ]
+
+        }
+    },
+    {
+        "tableName" : "more",
+        "controller" : "MoreController",
+        "model" : {
+            "fields" : {
+                "id" : "primary",
+                "name" : "text",
+                "age" : "integer",
+                "price" : "decimal",
+                "password" : "hash",
+                "created_at" : "date"
+            },
+            "guarded" : ["id", "password"],
+            "fillable" : ["name", "age", "price", "created_at"],
+            
+            "view": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "GET",
+                        "route" : "/moreView",
+                        "name" : "moreView1"
+                    }
+                }
+            ],
+            "add": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/moreView2",
+                        "name" : "moreView2"
+                    }
+                },
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "GET",
+                        "route" : "/moreView5",
+                        "name" : "moreView3"
+                    }
+                }
+            ],
+
+            "edit": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/moreView3",
+                        "name" : "moreView4"
+                    }
+                }
+            ],
+            
+            "delete": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/moreView4",
+                        "name" : "moreView5"
                     }
                 }
             ]
