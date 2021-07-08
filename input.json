@@ -1,0 +1,63 @@
+[
+    {
+        "tableName" : "Test",
+        "controller" : "TestController",
+        "model" : {
+            "fields" : {
+                "id" : "primary",
+                "name" : "text",
+                "age" : "integer",
+                "price" : "decimal",
+                "password" : "hash",
+                "created_at" : "date"
+            },
+            
+            "view": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "GET",
+                        "route" : "/testView"
+                    }
+                }
+            ],
+            "add": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/testView2"
+                    }
+                },
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "GET",
+                        "route" : "/testView5"
+                    }
+                }
+            ],
+
+            "edit": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/testView3"
+                    }
+                }
+            ],
+            
+            "delete": [
+                {
+                    "fields" : ["name", "age", "price"],
+                    "request":{
+                        "type" : "POST",
+                        "route" : "/testView4"
+                    }
+                }
+            ]
+
+        }
+    }
+]
