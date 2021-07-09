@@ -4,9 +4,10 @@ class Model{
     public function __construct($input){
         $this->jsonInput = $input;
         $this->filePath = PROJECT_PATH . "/app/Models/";
+        $this->processModel();
     }
 
-    public function processFile(){
+    public function processModel(){
         foreach($this->jsonInput as $data){
             $this->processEach($data);
         }
@@ -24,6 +25,7 @@ class Model{
         
         $fillable = array_merge($modelData->model->fillable, $undefined);
 
+        // $insertingText = "\n\tprotected \$table = \n\n";
         $insertingText = "\n\tprotected \$fillable = ['" . implode("','", $fillable) . "'];\n\n";
         $insertingText .= "\n\tprotected \$guarded = ['" . implode("','", $modelData->model->guarded) . "'];\n\n}";
 

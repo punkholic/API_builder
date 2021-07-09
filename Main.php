@@ -3,12 +3,14 @@ include __DIR__."/Classes/Model.php";
 include __DIR__."/Classes/Controller.php";
 include __DIR__."/Classes/Route.php";
 include __DIR__."/Classes/Migration.php";
+include __DIR__."/includes/Common.php";
 
 class Main{
 
     public function __construct( $jsonFile ) { 
         
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
+        
         $this->processEnv();
         $project_path = PROJECT_PATH ;
         if( ! is_dir( $project_path ) ) {
