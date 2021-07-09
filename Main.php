@@ -1,8 +1,8 @@
 <?php
-include __DIR__."/Model.php";
-include __DIR__."/Controller.php";
-include __DIR__."/Route.php";
-include __DIR__."/Migration.php";
+include __DIR__."/Classes/Model.php";
+include __DIR__."/Classes/Controller.php";
+include __DIR__."/Classes/Route.php";
+include __DIR__."/Classes/Migration.php";
 
 class Main{
 
