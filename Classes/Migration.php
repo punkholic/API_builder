@@ -62,8 +62,6 @@ class Migration{
 
     }
     private function processFields($fields, $tableName){
-        $gotValues = "";
-
         $typeChange = [
             "primary" => "increments('PASSED_DATA')",
             "string" => "string('PASSED_DATA')",
@@ -73,19 +71,33 @@ class Migration{
             "hash" => "string('PASSED_DATA')",
             "date" => "date('PASSED_DATA')",
         ];
-
+        $options = [
+            "required" => "->nullable()"
+        ];
+        $gotValues = "";
+        
         foreach($fields as $key => $value){
+            $optionalInfo = explode("|", $value);
+            $value = $optionalInfo[0];
             $tableMethod = str_replace("PASSED_DATA", $key, $typeChange[$value]);
-            $gotValues .=  "\$table->$tableMethod;\n";
+            
+            $gotValues .=  "\$table->$tableMethod";
+
+            foreach($options as $option => $value){
+                if(!in_array($option, $optionalInfo)){
+                    $gotValues .= $value;
+                }
+            }
+            $gotValues .= ";\n";
         }
 
         $toReturn = "Schema::create('$tableName', ";
-
         $toReturn .= Common::renderFunction([
             "text" => $gotValues,
             "tabs" => 3,
             "params" => "Blueprint \$table"
         ]);
+
         $toReturn .= ");";
         return $toReturn . "\n";
     }

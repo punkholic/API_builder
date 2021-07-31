@@ -12,6 +12,9 @@ class Main{
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
         
         $this->processEnv();
+
+        $this->testing();
+
         $project_path = PROJECT_PATH ;
         if( ! is_dir( $project_path ) ) {
             echo shell_exec( "composer create-project --prefer-dist laravel/laravel " . $project_path ) ;
@@ -23,7 +26,6 @@ class Main{
 
         $this->migration = new Migration( $this->jsonInput );
 
-        $this->testing();
     }
     
     public function processEnv(){
@@ -36,6 +38,7 @@ class Main{
     }
 
     public function testing(){
+        // new Controller($this->jsonInput);
         // $this->model->processFile();
     }
     
