@@ -1,7 +1,7 @@
 <?php 
 class Common{
 
-    public function __constructor(){
+    private function __constructor(){
         
     }
 
@@ -30,7 +30,7 @@ class Common{
             "text" => "",
             "params" => ""
         ];
-        $args = Common::getDefault($arguments, $defaultValues, $args);
+        $args = self::getDefault($arguments, $defaultValues, $args);
         if(!$args){
             echo "Invalid data passed";
             return;

