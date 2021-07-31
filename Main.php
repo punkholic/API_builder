@@ -21,6 +21,7 @@ class Main{
         if( ! is_dir( $project_path ) ) {
             echo shell_exec( "composer create-project --prefer-dist laravel/laravel " . $project_path ) ;
         }
+        echo shell_exec( 'sudo chmod -R 777 ' . $project_path );
 
         $this->override_env();
 
@@ -50,12 +51,16 @@ class Main{
     public function override_env()
     {
         $new_env = file_get_contents(".env");
-        preg_match_all( '/([\w\S ]+)=([\w\S ]+)/s' , $new_env, $overwrite);
+        preg_match_all( '/([\w\S ]+)=([\w\S ]+)/s' , $new_env , $overwrite);
+
+        // preg_match_all( '/([\w\S ]+)=([\w\S ]+)|([\w\S ]+)=/s' , $new_env, $overwrite);
 
         
         $data = file_get_contents( PROJECT_PATH . "/.env" );
         preg_match_all( '/([\w\S ]+)=([\w\S ]+)/s' , $data, $matches);
+        // preg_match_all( '/([\w\S ]+)=([\w\S ]+)|([\w\S ]+)=/s' , $data, $matches);
 
+     
 
         $new_env_overwrite = ""; 
         $new_env_overwrite .= "\n ";
@@ -87,11 +92,7 @@ class Main{
         }
         
         file_put_contents( PROJECT_PATH . "/.env", $new_env_overwrite  );
-        // $env_file_path = fopen( PROJECT_PATH . "/.env" , "w" );
-        // if( !$env_file_path )
-        // {
-        //     return FALSE;
-        // }
+       
         
     }
     
