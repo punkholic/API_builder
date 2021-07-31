@@ -7,7 +7,7 @@ class Migration{
         $this->filePath = PROJECT_PATH . "/database/migrations/";
         $this->migrations = $this->getFileList();
         $this->processModel();
-        // echo shell_exec("cd " . PROJECT_PATH . " && php artisan migrate");
+        echo shell_exec("cd " . PROJECT_PATH . " && php artisan migrate");
     }
     
     private function getFileList(){
