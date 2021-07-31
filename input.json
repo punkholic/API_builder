@@ -1,19 +1,18 @@
 [
     {
-        "tableName" : "Test",
-        "controller" : "TestController",
+        "tableName" : "Blog",
+        "controller" : "BlogController",
         "model" : {
             "fields" : {
                 "id" : "primary",
-                "name" : "text|required",
-                "age" : "integer|required",
-                "price" : "decimal|required",
-                "password" : "hash",
-                "created_at" : "date"
+                "title" : "string|required",
+                "description" : "text|required",
+                "status" : "enum|required",
+                "abc" : "string"
             },
             "guarded" : ["id", "password"],
-            "fillable" : ["name", "age", "price", "created_at"],
-            
+            "fillable" : ["title", "description", "status","abc"],
+            "timestamps" : true,
             "view": [
                 {
                     "fields" : ["name", "age", "price"],
@@ -77,12 +76,11 @@
                 "name" : "text",
                 "age" : "integer",
                 "price" : "decimal",
-                "password" : "hash",
-                "created_at" : "date"
+                "password" : "hash"
             },
             "guarded" : ["id", "password"],
-            "fillable" : ["name", "age", "price", "created_at"],
-            
+            "fillable" : ["name", "age", "price"],
+            "timestamps" : true,
             "view": [
                 {
                     "fields" : ["name", "age", "price"],

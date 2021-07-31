@@ -12,14 +12,23 @@ class Model{
             $this->processEach($data);
         }
     }
-
+   
     public function processEach($modelData){
+      
+        $exist = glob( $this->filePath . $modelData->tableName . ".php");
+        if( $exist )
+        {
+            unlink( $this->filePath . $modelData->tableName . ".php" );
+        }
+      
         $undefined = [];
-        foreach($modelData->model->fields as $key => $value){
-            if(!in_array($key, $modelData->model->fillable) && !in_array($key, $modelData->model->guarded)){
-                array_push($undefined, $key);
+        foreach( $modelData->model->fields as $key => $value){
+           
+            if( ! in_array( $key, $modelData->model->fillable ) && ! in_array( $key, $modelData->model->guarded ) ){
+                array_push( $undefined, $key );
             }
         }
+       
         //creating model
         echo shell_exec("cd ". PROJECT_PATH . " && php artisan make:model " . $modelData->tableName);
         

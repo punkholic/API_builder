@@ -10,7 +10,7 @@ class Main{
     public function __construct( $jsonFile ) { 
         
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
-        
+        $this->jsonInput = Common::validate_timestamp( $this->jsonInput );
         $this->processEnv();
 
         $this->testing();
@@ -30,7 +30,7 @@ class Main{
         $this->controller = new Controller( $this->jsonInput );
 
         $this->migration = new Migration( $this->jsonInput );
-
+        
     }
     
     public function processEnv(){

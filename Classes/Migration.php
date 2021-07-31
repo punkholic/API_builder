@@ -26,15 +26,14 @@ class Migration{
             $key = str_replace("_table.php", "", $key);
             $toReturn[$key] = $value;
         }
-        dd($toReturn);
-        die();
+       
         return $toReturn;
     }
 
     private function processModel(){
-        foreach($this->jsonInput as $data){
+        foreach( $this->jsonInput as $data ){
             if( array_key_exists( strtolower($data->tableName), $this->migrations )){
-                echo "Ignoring table $data->tableName, reason: already exist\n";
+                echo "Ignoring table $data->tableName, reason: already exist If you have any additions please drop the table from your side and run migrations.\n";
                 continue;
             }
             $this->processEach($data);
@@ -73,6 +72,8 @@ class Migration{
             "decimal" => "decimal('PASSED_DATA', 8, 2)",
             "hash" => "string('PASSED_DATA')",
             "date" => "date('PASSED_DATA')",
+            "datetime" => "dateTime('PASSED_DATA')",
+            "enum" => "string('PASSED_DATA', 1)"
         ];
         $options = [
             "required" => "->nullable()"
@@ -82,7 +83,7 @@ class Migration{
         foreach($fields as $key => $value){
             $optionalInfo = explode("|", $value);
             $value = $optionalInfo[0];
-            $tableMethod = str_replace("PASSED_DATA", $key, $typeChange[$value]);
+            $tableMethod = str_replace( "PASSED_DATA", $key, $typeChange[$value] );
             
             $gotValues .=  "\$table->$tableMethod";
 

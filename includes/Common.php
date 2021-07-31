@@ -5,7 +5,7 @@ class Common{
         
     }
 
-    private static function getDefault($args, $default, $passedArgs){
+    private static function getDefault( $args, $default, $passedArgs ){
         //initilize default data
         foreach($args as $value){
             if(!array_key_exists($value, $passedArgs)){
@@ -47,5 +47,37 @@ class Common{
         $toReturn .= "\t}";
         return $toReturn;
     }
+
+    public static function validate_timestamp( $json )
+    {
+        if( is_array( $json ) )
+        {
+            foreach( $json as &$value )
+            {
+            
+                   
+                    switch ( $value->model->timestamps ) {
+                        case TRUE:                         
+                            $model_prop = $value->model;
+                          
+                            if( $model_prop->timestamps )
+                            {
+                                $value->model->fields->created_at = "date";
+                                $value->model->fields->updated_at = "datetime";
+
+                                $value->model->fillable[] = "created_at";
+                                $value->model->fillable[] = "updated_at";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+               
+                    
+            }   
+        }
+    
+        return $json;
+    } 
 }
 ?>
