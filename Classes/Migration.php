@@ -11,6 +11,7 @@ class Migration{
     }
     
     private function getFileList(){
+
         //get files from respective dir
         $files = glob( $this->filePath . "*.php" );
         
@@ -25,6 +26,8 @@ class Migration{
             $key = str_replace("_table.php", "", $key);
             $toReturn[$key] = $value;
         }
+        dd($toReturn);
+        die();
         return $toReturn;
     }
 
