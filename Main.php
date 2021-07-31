@@ -50,11 +50,11 @@ class Main{
     public function override_env()
     {
         $new_env = file_get_contents(".env");
-        preg_match_all( '/([\w\S]+)=([\w\S]+)/s' , $new_env, $overwrite);
+        preg_match_all( '/([\w\S ]+)=([\w\S ]+)/s' , $new_env, $overwrite);
 
         
         $data = file_get_contents( PROJECT_PATH . "/.env" );
-        preg_match_all( '/([\w\S]+)=([\w\S]+)/s' , $data, $matches);
+        preg_match_all( '/([\w\S ]+)=([\w\S ]+)/s' , $data, $matches);
 
 
         $new_env_overwrite = ""; 
