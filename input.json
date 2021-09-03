@@ -29,7 +29,7 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/testView2",
+                        "route" : "/testView2/{id}/{value}",
                         "name" : "testView1"
                     }
                 },
