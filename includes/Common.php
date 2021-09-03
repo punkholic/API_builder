@@ -47,7 +47,9 @@ class Common{
         $toReturn .= "\t}";
         return $toReturn;
     }
-
+    /**
+     * Function to validate and add if timestamp key is set to true in the input.json file.
+     */
     public static function validate_timestamp( $json )
     {
         if( is_array( $json ) )
@@ -79,5 +81,40 @@ class Common{
     
         return $json;
     } 
+    /**
+     * Function to Generate / write the dynamic script in server.sh file.
+     */
+    public function get_basic_script_commands( $project_path )
+    {
+        if( isset( $project_path ) )
+        {
+            $server_port = SERVER_PORT;
+            $common_command = "cd " . $project_path . "\n";
+            
+            if( $_SESSION['global_counter'] == 0 )
+            {
+                if( isset( $server_port ) )
+                {
+                    $common_command .= "nohup php artisan serve --port=$server_port & > /dev/null 2>&1"  ;
+        
+                }
+                else
+                {
+                    $common_command .= "nohup php artisan serve & > /dev/null 2>&1";
+                }
+
+                
+                $_SESSION['global_counter'] += 1 ; 
+            }
+            
+
+            
+            file_put_contents( "server.sh", $common_command );
+            shell_exec( "chmod -R 777 server.sh" );
+            shell_exec( "./server.sh" );
+
+        }
+              
+    }
 }
 ?>

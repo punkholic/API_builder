@@ -8,7 +8,8 @@ include __DIR__."/includes/Common.php";
 class Main{
 
     public function __construct( $jsonFile ) { 
-        
+        $_SESSION['global_counter'] = 0;
+
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
         $this->jsonInput = Common::validate_timestamp( $this->jsonInput );
         $this->processEnv();
@@ -17,12 +18,29 @@ class Main{
 
 
         $project_path = PROJECT_PATH ;
-   
+        $run_server = RUN_SERVER;
+        $make_auth= MAKE_AUTH;
+
+        
+        
         if( ! is_dir( $project_path ) ) {
             echo shell_exec( "composer create-project --prefer-dist laravel/laravel " . $project_path ) ;
+            if( isset( $make_auth ) )
+            {
+                shell_exec( 'sudo chmod -R 777 laravel_default.sh' );
+                $command = "cd " . $project_path . "\n";
+                $command .= "composer require laravel/ui" . "\n";
+                $command .= "php artisan ui:auth" . "\n";
+                $command .= "php artisan ui:auth --views" . "\n";
+                file_put_contents( 'laravel_default.sh', $command );
+                shell_exec("./laravel_default.sh") ;
+            }
         }
-        echo shell_exec( 'sudo chmod -R 777 ' . $project_path );
+        shell_exec( 'sudo chmod -R 777 ' . $project_path );
 
+        
+        // $this->server_check( $run_server, $project_path );
+       
         $this->override_env();
 
         $this->model = new Model( $this->jsonInput );
@@ -94,6 +112,22 @@ class Main{
         file_put_contents( PROJECT_PATH . "/.env", $new_env_overwrite  );
        
         
+    }
+
+    public function server_check( $run_server = FALSE, $project_path )
+    {
+        if( $run_server == "true" && $_SESSION['global_counter'] == 0 )
+        {
+            $commands = Common::get_basic_script_commands( $project_path );
+
+        }
+        else
+        {
+            $php_version = PHP_VERSION_KILL;
+            $_SESSION['global_counter'] = 0;
+            shell_exec( "killall -9 php7.4" );
+        }
+        return ;
     }
     
 }
