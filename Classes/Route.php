@@ -27,7 +27,7 @@ class Route{
 
                 //remove if already defined in file
                 $regex = "Route::$type\(('|\")\\$route('|\")(.*);";
-                $toWrite = preg_replace("/$regex/s", '', $toWrite);
+                $toWrite = preg_replace('/$regex/s', '', $toWrite);
                 
                 // overwrite or add new one
                 $toWrite .= "\nRoute::$type('$route','App\Http\Controllers\\$modelData->tableName"."$modelData->controller@$methodName');\n";
