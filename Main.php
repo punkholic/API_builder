@@ -19,13 +19,12 @@ class Main{
 
         $project_path = PROJECT_PATH ;
         $run_server = RUN_SERVER;
-        $make_auth= MAKE_AUTH;
+        $make_auth = MAKE_AUTH;
 
-        
-        
         if( ! is_dir( $project_path ) ) {
+            
             echo shell_exec( "composer create-project --prefer-dist laravel/laravel " . $project_path ) ;
-            if( isset( $make_auth ) )
+            if( $make_auth === "true" )
             {
                 shell_exec( 'sudo chmod -R 777 laravel_default.sh' );
                 $command = "cd " . $project_path . "\n";
@@ -35,16 +34,20 @@ class Main{
                 file_put_contents( 'laravel_default.sh', $command );
                 shell_exec("./laravel_default.sh") ;
             }
+            $file_git_ignore = file_get_contents( ".gitignore" );
+            $file_git_ignore .= "\n\n" . $project_path  . "\n";
+            $new_file = file_put_contents( ".gitignore" , $file_git_ignore );
+            
         }
 
         echo shell_exec( 'chmod -R 777 ' . $project_path );
 
         Common::override_env();        
-        // $this->model = new Model( $this->jsonInput );
-        // $this->route = new Route( $this->jsonInput );
+        $this->model = new Model( $this->jsonInput );
+        $this->route = new Route( $this->jsonInput );
         $this->controller = new Controller( $this->jsonInput );
 
-        // $this->migration = new Migration( $this->jsonInput );
+        $this->migration = new Migration( $this->jsonInput );
 
     }
     

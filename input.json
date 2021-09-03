@@ -12,6 +12,15 @@
             },
             "guarded" : ["id", "password"],
             "fillable" : ["title", "description", "status","abc"],
+            "mapping" : [
+                { 
+                    "status" : { "0" : "InActive" , "1" : "Active" }
+                    
+                },
+                {"description" : { "xyz" : "xyz" , "abc" : "abc" } },
+                {"abc" : { "456" : "123" , "abc" : "55" } }
+
+            ],
             "timestamps" : true,
             "view": [
                 {
@@ -80,6 +89,9 @@
             },
             "guarded" : ["id", "password"],
             "fillable" : ["name", "age", "price"],
+            "mapping" : [
+               
+            ],
             "timestamps" : true,
             "view": [
                 {
