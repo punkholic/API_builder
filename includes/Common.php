@@ -50,6 +50,38 @@ class Common{
     /**
      * Function to validate and add if timestamp key is set to true in the input.json file.
      */
+
+    public function makeAssoc( $data ){
+        $toReturn = [];
+        foreach($data as $value){
+            $toPut = explode("=", $value);
+            $toReturn[$toPut[0]] = $toPut[1];
+        }
+        return $toReturn;
+    }
+
+    public function override_env() {
+        $gotData = file_get_contents(".env");
+        $toOverride = file_get_contents(PROJECT_PATH . "/.env");
+        
+        preg_match_all( '/\w+=([\w\S]+){0,}/s' , $gotData, $rawGotData);
+        preg_match_all( '/\w+=([\w\S]+){0,}/s' , $gotData, $rawToOverride);
+        
+        $rawGotData = self::makeAssoc($rawGotData[0]);
+        $rawToOverride = self::makeAssoc($rawToOverride[0]);
+
+        $finalData = array_merge($rawGotData, $rawToOverride);
+        
+        $toWrite = ""; $count = 0;
+        
+        foreach($finalData as $key => $value){
+            $toWrite .= "$key = $value\n";
+            $count++;
+            if ($count % 4 == 0 ) $toWrite .= "\n\n";
+        }
+        file_put_contents(PROJECT_PATH . "/.env", $toWrite);
+    }
+
     public static function validate_timestamp( $json )
     {
         if( is_array( $json ) )

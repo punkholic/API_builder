@@ -5,7 +5,7 @@ class Controller{
         $this->jsonInput = $jsonData;
         $this->filePath = PROJECT_PATH . "/app/Http/Controllers/";
         $this->toProcess = ["add", "delete", "view", "edit"];
-        $this->processModel($jsonData);
+        $this->processModel();
     }
     
     public function processModel(){
@@ -16,41 +16,56 @@ class Controller{
 
     public function processEach($modelData){
         foreach($this->toProcess as $value){
-            // $this->$value($modelData->model->$value, $modelData->model->fields);
+            $this->$value($modelData->model->$value, $modelData->model->fields);
         }
     }
 
+    public function getFunctionParams($data){
+        $functionName = $data->request->name;
+        $route = $data->request->route;
+        $toReturn = "public function $functionName(Request \$request";
+
+        preg_match_all('/{[\w\d$_]+}/i', $route, $matched);
+        if(!empty($matched[0])){
+            foreach($matched[0] as $value){
+                $toReturn .= ", " . preg_replace('/[{}]/', "", $value);
+            }
+        }
+        $toReturn .= ")";
+        return $toReturn;        
+    }
+
     public function view($requestData, $fields){
+        // echo "asd";
         foreach($requestData as $value){
 
             $functionName = $value->request->name;
             $route = $value->request->name;
-
+            
             if(preg_match("/{(.*)}/i", $route)){
                 echo "Has param";
             }
             
-            print_r($value);
         }
-        // print_r($fields);
+    }
+
+    public function edit($requestData, $fields){
+    }
+
+    public function add($requestData, $fields){
+        foreach($requestData as $value){
+            $functionTop = $this->getFunctionParams($value);
+            $this->getFieldTypes($value);
+        }
         die();
     }
-
-    public function edit($request, $fields){
-        print_r($request);
-    }
-
-    public function add($request, $fields){
-        foreach($requestData as $value){
-            $functionName = $value->request->name;
-            $route = $value->request->name;
-
-        }
-        print_r($request);
-    }
     
-    public function delete($request, $fields){
-        print_r($request);
+    public function delete($requestData, $fields){
+
+    }
+
+    public function getFieldTypes( $fields ){
+        print_r($fields);   
     }
 }
 ?>
