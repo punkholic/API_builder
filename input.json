@@ -15,7 +15,7 @@
             "timestamps" : true,
             "view": [
                 {
-                    "fields" : ["name", "age", "price"],
+                    "fields" : ["description", "status"],
                     "request":{
                         "type" : "GET",
                         "route" : "/testView",
@@ -26,7 +26,7 @@
             ],
             "add": [
                 {
-                    "fields" : ["name", "age", "price"],
+                    "fields" : ["description", "status", "abc", "password"],
                     "request":{
                         "type" : "POST",
                         "route" : "/testView2/{id}/{value}",
@@ -34,7 +34,7 @@
                     }
                 },
                 {
-                    "fields" : ["name", "age", "price"],
+                    "fields" :  ["description", "status"],
                     "request":{
                         "type" : "GET",
                         "route" : "/testView5",
@@ -45,7 +45,7 @@
 
             "edit": [
                 {
-                    "fields" : ["name", "age", "price"],
+                    "fields" : ["description", "status"],
                     "request":{
                         "type" : "POST",
                         "route" : "/testView3",
@@ -56,7 +56,7 @@
             
             "delete": [
                 {
-                    "fields" : ["name", "age", "price"],
+                    "fields" : ["description", "status"],
                     "request":{
                         "type" : "POST",
                         "route" : "/testView4",

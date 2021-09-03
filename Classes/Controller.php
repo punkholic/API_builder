@@ -55,7 +55,7 @@ class Controller{
     public function add($requestData, $fields){
         foreach($requestData as $value){
             $functionTop = $this->getFunctionParams($value);
-            $this->getFieldTypes($value);
+            $this->getFieldTypes($value->fields, $fields);
         }
         die();
     }
@@ -64,8 +64,13 @@ class Controller{
 
     }
 
-    public function getFieldTypes( $fields ){
-        print_r($fields);   
+    public function getFieldTypes( $fields, $allFields ){
+        foreach($fields as $value){
+            echo $value;
+            // if(array_key_exists($value, $allFields)){
+            //     echo $allFields[$value];
+            // }
+        }
     }
 }
 ?>
