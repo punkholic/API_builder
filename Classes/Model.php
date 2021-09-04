@@ -36,7 +36,7 @@ class Model{
         
 
         //creating model
-        echo shell_exec("cd ". PROJECT_PATH . " && php artisan make:model " . $modelData->tableName);
+        echo shell_exec("cd ". PROJECT_PATH . " && " . Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
         
         $fillable = array_merge($modelData->model->fillable, $undefined);
 

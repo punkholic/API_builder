@@ -118,7 +118,7 @@ class Controller{
                     return ["Success" => true]; 
                 }
                 text;
-                echo $toReturn . "\n\n\n\n\n\n\n\n";
+                // echo $toReturn . "\n\n\n\n\n\n\n\n";
         }
     }
     

@@ -51,6 +51,19 @@ class Common{
      * Function to validate and add if timestamp key is set to true in the input.json file.
      */
 
+    public function processEnv(){
+        $data = file_get_contents( ".env" );
+        
+        preg_match_all( '/\w+=([\w\S]+){0,}/s' , $data, $matches);
+        $envData = Common::makeAssoc($matches[0]);
+        
+        foreach (Constant::PROJECT_ENV  as $value ) {
+            if(array_key_exists($value, $envData)){
+                define( trim( $value ), trim( $envData[$value] ) );
+            }
+        }
+    }
+
     public function makeAssoc( $data ){
         $toReturn = [];
         foreach($data as $value){
@@ -75,9 +88,11 @@ class Common{
         $toWrite = ""; $count = 0;
         
         foreach($finalData as $key => $value){
-            $toWrite .= "$key = $value\n";
-            $count++;
-            if ($count % 4 == 0 ) $toWrite .= "\n\n";
+            if(!in_array($key, Constant::PROJECT_ENV)){
+                $toWrite .= "$key = $value\n";
+                $count++;
+                if ($count % 4 == 0 ) $toWrite .= "\n\n";
+            }
         }
         file_put_contents(PROJECT_PATH . "/.env", $toWrite);
     }
@@ -121,30 +136,24 @@ class Common{
         if( isset( $project_path ) )
         {
             $server_port = SERVER_PORT;
-            $common_command = "cd " . $project_path . "\n";
+            $common_command = "cd " . $project_path . " && ";
             
             if( $_SESSION['global_counter'] == 0 )
             {
                 if( isset( $server_port ) )
                 {
-                    $common_command .= "nohup php artisan serve --port=$server_port & > /dev/null 2>&1"  ;
+                    $common_command .= "nohup " . Constant::COMMANDS['START_SERVER']["WITH_PORT"] . " & > /dev/null 2>&1"  ;
         
                 }
                 else
                 {
-                    $common_command .= "nohup php artisan serve & > /dev/null 2>&1";
+                    $common_command .= "nohup " . Constant::COMMANDS['START_SERVER']["WITHOUT_PORT"] . " & > /dev/null 2>&1";
                 }
 
                 
                 $_SESSION['global_counter'] += 1 ; 
             }
-            
-
-            
-            file_put_contents( "server.sh", $common_command );
-            shell_exec( "chmod -R 777 server.sh" );
-            shell_exec( "./server.sh" );
-
+            shell_exec( $common_command );
         }
               
     }

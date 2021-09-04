@@ -7,7 +7,7 @@ class Migration{
         $this->filePath = PROJECT_PATH . "/database/migrations/";
         $this->migrations = $this->getFileList();
         $this->processModel();
-        echo shell_exec("cd " . PROJECT_PATH . " && php artisan migrate");
+        echo shell_exec("cd " . PROJECT_PATH . " && " . Constant::COMMANDS['MIGRATE_FRESH']);
     }
     
     private function getFileList(){
@@ -42,7 +42,9 @@ class Migration{
 
     private function processEach($modelData){
         $tableName = strtolower( $modelData->tableName );
-        shell_exec("cd " . PROJECT_PATH . " && php artisan make:migration create_$tableName" . "_table --table=$modelData->tableName");
+        $phaseOne = str_replace("PLACEHOLDER1", $tableName, Constant::COMMANDS['MAKE_MIGRATION']);
+        $secondPhase = str_replace("PLACEHOLDER2", $modelData->tableName, $phaseOne);
+        shell_exec("cd " . PROJECT_PATH . " && $secondPhase");
 
         //generate code for recently created file
         $this->insertField( $tableName, $this->processFields( $modelData->model->fields, $tableName ) );
