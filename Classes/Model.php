@@ -87,9 +87,13 @@ class Model{
         $insertingText .= "}";
 
         $gotFileData = file_get_contents($this->filePath . $modelData->tableName . ".php");
-
+        $tableName = "\n\tprotected \$table = '$modelData->tableName';\n\n}";
         //removing pre-define content (if exist)
         $toInsert = preg_replace('/protected \$(fillable|guarded)(.*);/s', '', $gotFileData);
+        $toInsert = preg_replace('/[ \t]{0,}protected[ \t]{0,}\$table[ \t]{0,}=[ \t]{0,}\'(.*)\'[ \t]{0,};/', $tableName, $gotFileData);
+        if(!preg_match('/\$table/', $gotFileData)){
+            $toInsert = preg_replace('/\n}/s', $tableName, $toInsert);
+        }
         $toInsert = preg_replace('/\n}/s', $insertingText, $toInsert);
 
         //writing to file

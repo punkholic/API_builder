@@ -1,6 +1,6 @@
 [
     {
-        "tableName" : "Blog",
+        "tableName" : "blog",
         "controller" : "BlogController",
         "model" : {
             "fields" : {
@@ -99,7 +99,7 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "GET",
-                        "route" : "/moreView",
+                        "route" : "/getMore",
                         "name" : "moreView1"
                     }
                 }
@@ -109,16 +109,16 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/moreView2",
+                        "route" : "/storeMore",
                         "name" : "moreView2"
                     }
                 },
                 {
                     "fields" : ["name", "age", "price"],
                     "request":{
-                        "type" : "GET",
+                        "type" : "POST",
                         "route" : "/moreView5",
-                        "name" : "moreView3"
+                        "name" : "store"
                     }
                 }
             ],
@@ -128,7 +128,7 @@
                     "fields" : ["name", "age", "price"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/moreView3",
+                        "route" : "/editMore/{id}",
                         "name" : "moreView4"
                     }
                 }
@@ -138,8 +138,8 @@
                 {
                     "fields" : ["name", "age", "price"],
                     "request":{
-                        "type" : "POST",
-                        "route" : "/moreView4",
+                        "type" : "DELETE",
+                        "route" : "/deleteMore/{id}",
                         "name" : "moreView5"
                     }
                 }

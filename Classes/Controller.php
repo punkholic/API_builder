@@ -5,10 +5,6 @@ class Controller{
         $this->jsonInput = $jsonData;
         $this->filePath = PROJECT_PATH . "/app/Http/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
-        $this->controllerHeading = [
-            "use Illuminate\\\Http\\\Request;",
-            "use Illuminate\\\Support\\\Facades\\\Hash;"
-        ];
         $this->processModel();
     }
     
@@ -20,29 +16,33 @@ class Controller{
     }
 
     public function processEach($modelData){
-        $toPut = "";
+        $this->controllerCode = file_get_contents("$this->filePath$modelData->controller.php");
         foreach($this->toProcess as $value){
-            $toPut .= $this->$value($modelData->model->$value, $modelData->model->fields, $modelData) . "\n\n";
+            $this->$value($modelData->model->$value, $modelData->model->fields, $modelData) . "\n\n";
         }
-        echo $modelData->controller;
+        $this->setControllersHeadings($modelData->tableName);
+        file_put_contents("$this->filePath$modelData->controller.php", $this->controllerCode);
+    }
+    public function setControllersHeadings($tableName){
+        $toCheck = [
+            "use Illuminate\\\Http\\\Request;",
+            "use Illuminate\\\Support\\\Facades\\\Hash;"
+        ];
 
-        $controllerCode = file_get_contents("$this->filePath$modelData->controller.php");
-       
-        $toCheck = $this->controllerHeading;
-        $toCheck[] = "use App\Models\\{$modelData->tableName}";
+        $databaseModel = "use App\\\\Models\\\\{$tableName};" ;
         
+        if(!preg_match("/$databaseModel/i", $this->controllerCode)){
+            $toInsert = "\n\n$databaseModel\n\n class";
+            $this->controllerCode = preg_replace("/[\n ]+class/i", $toInsert, $this->controllerCode);
+        }
+
         foreach($toCheck as $value){
-            if(!preg_match("/$value/i", $controllerCode)){
-                $toInsert = "$value\n class";
-                $controllerCode = preg_replace("/\nclass/i", $toInsert, $controllerCode);
+            if(!preg_match("/$value/i", $this->controllerCode)){
+                $toInsert = "\n\n$value\n class";
+                $this->controllerCode = preg_replace("/[\n ]+class/i", $toInsert, $this->controllerCode);
             }
         }
-        $toPut = "extends Controller\n{\n\t$toPut";
-
-        $toPut = preg_replace("/extends[ ]+Controller[\n\t ]+{/i", $toPut, $controllerCode);
-        file_put_contents("$this->filePath$modelData->controller.php", $toPut);
     }
-
     public function getArrayString($arrayName, $array, $type){
         $toReturn = "\$$arrayName = [";
         // if(array_values($array) !== $array){ didnt worked
@@ -75,6 +75,17 @@ class Controller{
         return $toReturn;        
     }
 
+    public function replaceFunction($functionName, $toChange){
+        $regex = '[ ]{0,}public[ \n]+function[ \n]+' . $functionName . '[\d\D]+?return[\d\D]+?}';
+        if(preg_match("/$regex/", $this->controllerCode)){
+            $this->controllerCode = preg_replace("/$regex/", $toChange, $this->controllerCode);
+        }else{
+            $toChange = "extends Controller \n{\n" . $toChange;
+            $this->controllerCode = preg_replace("/extends[ ]+Controller[\n \t]+{/", $toChange, $this->controllerCode);
+        }
+    }
+
+    
     public function view($requestData, $fields, $modelData){
         $allFields = array_keys((array)$fields);
         
@@ -86,8 +97,8 @@ class Controller{
             $validFields = (array_intersect($allFields, $value->fields));
             if(!empty($validFields)){
                 $selectData = "";
-                foreach($validFields as $value){
-                    $selectData .= "'$value', ";
+                foreach($validFields as $data){
+                    $selectData .= "'$data', ";
                 }
                 $selectData = substr($selectData, 0, strlen($selectData) - 2);
             }
@@ -98,7 +109,8 @@ class Controller{
                 return \$data;
             }
             text;
-            return $toReturn;
+            $this->replaceFunction($value->request->name, $toReturn);
+
         }
     }
     public function getRouteParam($route){
@@ -138,7 +150,7 @@ class Controller{
                 return ["Success" => true]; 
             }
             text;
-            return $toReturn;
+            $this->replaceFunction($value->request->name, $toReturn);
         }
     }
 
@@ -159,16 +171,16 @@ class Controller{
             
             $optionalHashString = ""; $requiredHashString = "";
             
-            foreach($optionalHash as $value){
+            foreach($optionalHash as $data){
                 $optionalHashString .= <<<text
-                    if(array_key_exists('$value', \$toStore)){
-                            \$toStore['$value'] = Hash::make(\$toStore['$value']);
+                    if(array_key_exists('$data', \$toStore)){
+                            \$toStore['$data'] = Hash::make(\$toStore['$data']);
                         }
                     text;
             }
 
-            foreach($requiredHash as $value){
-                $requiredHashString .= "\$toStore['$value'] = Hash::make(\$toStore['$value']);\n";
+            foreach($requiredHash as $data){
+                $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
             }
 
             $toReturn = <<<text
@@ -181,8 +193,8 @@ class Controller{
                         \$toStore[\$mustHave[\$i]] = \$request->get(\$mustHave[\$i]);
                     }
                     \$toStore = [];
-                    for(\$i = 0; \$i < count(\$mustHave); \$i++){
-                        \$toStore[\$mustHave[\$i]] = \$request->get(\$mustHave[\$i]);
+                    for(\$i = 0; \$i < count(\$optionalField); \$i++){
+                        \$toStore[\$optionalField[\$i]] = \$request->get(\$optionalField[\$i]);
                     }
                     $requiredHashString
                     $optionalHashString
@@ -190,7 +202,7 @@ class Controller{
                     return ["Success" => true]; 
                 }
                 text;
-                return $toReturn;
+                $this->replaceFunction($value->request->name, $toReturn);
             }
     }
     
@@ -205,7 +217,7 @@ class Controller{
                 return ["Success" => true];
             }
             text;
-            return $toReturn;
+            $this->replaceFunction($value->request->name, $toReturn);
         }
     }
 
