@@ -9,10 +9,12 @@ abstract class Constant {
         "MAKE_MIGRATION" => "php artisan make:migration create_PLACEHOLDER1_table --table=PLACEHOLDER2",
         "MIGRATE_FRESH" => "php artisan migrate:fresh",
         "MAKE_MODEL" => "php artisan make:model ",
+        "MAKE_CONTROLLER" => "php artisan make:controller ",
         "START_SERVER" => [
             "WITH_PORT" => "php artisan serve --port=",
             "WITHOUT_PORT" => "php artisan serve",
         ],
     ];
+    
 }
 ?>

@@ -30,7 +30,7 @@ class Route{
                 $toWrite = preg_replace('/$regex/s', '', $toWrite);
                 
                 // overwrite or add new one
-                $toWrite .= "\nRoute::$type('$route','App\Http\Controllers\\$modelData->tableName"."$modelData->controller@$methodName');\n";
+                $toWrite .= "\nRoute::$type('$route','App\Http\Controllers\\$modelData->controller@$methodName');\n";
             }
         }
         file_put_contents($this->filePath, $toWrite);

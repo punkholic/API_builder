@@ -58,7 +58,7 @@
                     "fields" : ["description", "status"],
                     "request":{
                         "type" : "POST",
-                        "route" : "/testView3",
+                        "route" : "/testView3/{id}/{value}",
                         "name" : "testView3"
                     }
                 }

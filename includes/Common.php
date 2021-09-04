@@ -77,19 +77,17 @@ class Common{
         $gotData = file_get_contents(".env");
         $toOverride = file_get_contents(PROJECT_PATH . "/.env");
         
-        preg_match_all( '/\w+=([\w\S]+){0,}/s' , $gotData, $rawGotData);
-        preg_match_all( '/\w+=([\w\S]+){0,}/s' , $gotData, $rawToOverride);
+        preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $gotData, $rawGotData);
+        preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $toOverride, $rawToOverride);
         
         $rawGotData = self::makeAssoc($rawGotData[0]);
         $rawToOverride = self::makeAssoc($rawToOverride[0]);
 
-        $finalData = array_merge($rawGotData, $rawToOverride);
-        
+        $finalData = array_merge($rawToOverride, $rawGotData);
         $toWrite = ""; $count = 0;
-        
         foreach($finalData as $key => $value){
             if(!in_array($key, Constant::PROJECT_ENV)){
-                $toWrite .= "$key = $value\n";
+                $toWrite .= trim($key) . "=" . trim($value) . "\n";
                 $count++;
                 if ($count % 4 == 0 ) $toWrite .= "\n\n";
             }

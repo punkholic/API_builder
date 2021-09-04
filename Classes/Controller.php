@@ -4,20 +4,43 @@ class Controller{
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
         $this->filePath = PROJECT_PATH . "/app/Http/Controllers/";
-        $this->toProcess = ["add", "edit", "delete", "view" ];
+        $this->toProcess = ["view", "edit", "add", "delete" ];
+        $this->controllerHeading = [
+            "use Illuminate\\\Http\\\Request;",
+            "use Illuminate\\\Support\\\Facades\\\Hash;"
+        ];
         $this->processModel();
     }
     
     public function processModel(){
         foreach($this->jsonInput as $data){
+            echo shell_exec("cd " . PROJECT_PATH . " && " . Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
             $this->processEach($data);
         }
     }
 
     public function processEach($modelData){
+        $toPut = "";
         foreach($this->toProcess as $value){
-            $this->$value($modelData->model->$value, $modelData->model->fields, $modelData);
+            $toPut .= $this->$value($modelData->model->$value, $modelData->model->fields, $modelData) . "\n\n";
         }
+        echo $modelData->controller;
+
+        $controllerCode = file_get_contents("$this->filePath$modelData->controller.php");
+       
+        $toCheck = $this->controllerHeading;
+        $toCheck[] = "use App\Models\\{$modelData->tableName}";
+        
+        foreach($toCheck as $value){
+            if(!preg_match("/$value/i", $controllerCode)){
+                $toInsert = "$value\n class";
+                $controllerCode = preg_replace("/\nclass/i", $toInsert, $controllerCode);
+            }
+        }
+        $toPut = "extends Controller\n{\n\t$toPut";
+
+        $toPut = preg_replace("/extends[ ]+Controller[\n\t ]+{/i", $toPut, $controllerCode);
+        file_put_contents("$this->filePath$modelData->controller.php", $toPut);
     }
 
     public function getArrayString($arrayName, $array, $type){
@@ -53,21 +76,70 @@ class Controller{
     }
 
     public function view($requestData, $fields, $modelData){
-        // echo "asd";
+        $allFields = array_keys((array)$fields);
+        
         foreach($requestData as $value){
+            $functionTop = $this->getFunctionParams($value);
 
-            $functionName = $value->request->name;
-            $route = $value->request->name;
-            
-            if(preg_match("/{(.*)}/i", $route)){
-                echo "Has param";
+            $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+            $selectData = "*";
+            $validFields = (array_intersect($allFields, $value->fields));
+            if(!empty($validFields)){
+                $selectData = "";
+                foreach($validFields as $value){
+                    $selectData .= "'$value', ";
+                }
+                $selectData = substr($selectData, 0, strlen($selectData) - 2);
             }
-            
+
+            $toReturn = <<<text
+            $functionTop{
+                \$data =  $modelData->tableName::{$whereClause}select($selectData)->get();
+                return \$data;
+            }
+            text;
+            return $toReturn;
         }
+    }
+    public function getRouteParam($route){
+        preg_match_all('/{[\w\d]+}/', $route, $matched);
+
+        $fields = [];
+        $whereClause = "";
+        
+        foreach($matched[0] as $params){
+            $filteredField = preg_replace('/[{}]/', "", $params);
+            $fields[] =  $filteredField;
+            $whereClause .= "where('$filteredField', $$filteredField)->";
+        }
+        return ["whereClause" =>$whereClause, "fields" => $fields];
     }
 
     public function edit($requestData, $fields, $modelData){
+        $fieldsInfo = $this->getFieldTypes($fields);
+        foreach($requestData as $value){
 
+            $functionTop = $this->getFunctionParams($value);
+            $updateFieldString = $this->getArrayString("updateFields", $value->fields, "list");
+            $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+            
+            
+            $toReturn = <<<text
+            $functionTop
+            {
+                $updateFieldString
+                \$toUpdate = [];
+                foreach(\$updateFields as \$value){
+                    if(\$request->get(\$value) != null){
+                        \$toUpdate[\$value] = \$request->get(\$value);
+                    }
+                }
+                $modelData->tableName::{$whereClause}update(\$toUpdate);
+                return ["Success" => true]; 
+            }
+            text;
+            return $toReturn;
+        }
     }
 
     public function add($requestData, $fields, $modelData){
@@ -118,12 +190,23 @@ class Controller{
                     return ["Success" => true]; 
                 }
                 text;
-                // echo $toReturn . "\n\n\n\n\n\n\n\n";
-        }
+                return $toReturn;
+            }
     }
     
     public function delete($requestData, $fields, $modelData){
+        foreach($requestData as $value){
+            $functionTop = $this->getFunctionParams($value);
 
+            $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+            $toReturn = <<<text
+            $functionTop{
+                $modelData->tableName::{$whereClause}delete();
+                return ["Success" => true];
+            }
+            text;
+            return $toReturn;
+        }
     }
 
     public function getFieldTypes($data){
