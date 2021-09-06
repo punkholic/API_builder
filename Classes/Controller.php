@@ -224,7 +224,7 @@ class Controller{
     public function getFieldTypes($data){
         $toReturn = ["required" => [], "optional" => []];
         foreach($data as $key => $value){
-            if (is_numeric(strpos($value, "required"))){
+            if (strpos($value, "required") >= 0){
                 $toReturn["required"][] = $key;
             }else{
                 $toReturn["optional"][] = $key;
