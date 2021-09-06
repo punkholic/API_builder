@@ -230,7 +230,7 @@ class Controller{
                 $toReturn["optional"][] = $key;
             }
 
-            if (is_numeric(strpos($value, "hash"))){
+            if (strpos($value, "hash") >= 0){
                 $toReturn["hash"][] = $key;
             }
             
