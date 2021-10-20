@@ -78,20 +78,22 @@ class Migration{
             "enum" => "string('PASSED_DATA', 1)"
         ];
         $options = [
-            "required" => "->nullable()"
+            "required" => "->nullable()",
         ];
         $gotValues = "";
         
         foreach($fields as $key => $value){
+            $tempValue = $value;
             $optionalInfo = explode("|", $value);
             $value = $optionalInfo[0];
             $tableMethod = str_replace( "PASSED_DATA", $key, $typeChange[$value] );
             
             $gotValues .=  "\$table->$tableMethod";
-
-            foreach($options as $option => $value){
-                if(!in_array($option, $optionalInfo)){
-                    $gotValues .= $value;
+            if(strpos($value, "primary") === false){
+                foreach($options as $option => $value){
+                    if(!in_array($option, $optionalInfo)){
+                        $gotValues .= $value;
+                    }
                 }
             }
             $gotValues .= ";\n";

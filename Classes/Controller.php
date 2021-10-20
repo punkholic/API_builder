@@ -156,7 +156,6 @@ class Controller{
 
     public function add($requestData, $fields, $modelData){
         $fieldsInfo = $this->getFieldTypes($fields);
-
         foreach($requestData as $value){
             $functionTop = $this->getFunctionParams($value);
 
@@ -171,14 +170,6 @@ class Controller{
             
             $optionalHashString = ""; $requiredHashString = "";
             
-            foreach($optionalHash as $data){
-                $optionalHashString .= <<<text
-                    if(array_key_exists('$data', \$toStore)){
-                            \$toStore['$data'] = Hash::make(\$toStore['$data']);
-                        }
-                    text;
-            }
-
             foreach($requiredHash as $data){
                 $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
             }
@@ -224,13 +215,13 @@ class Controller{
     public function getFieldTypes($data){
         $toReturn = ["required" => [], "optional" => []];
         foreach($data as $key => $value){
-            if (strpos($value, "required") >= 0){
+            if (strpos($value, "required") !== false || strpos($value, "primary") !== false){
                 $toReturn["required"][] = $key;
             }else{
                 $toReturn["optional"][] = $key;
             }
 
-            if (strpos($value, "hash") >= 0){
+            if (strpos($value, "hash") !== false){
                 $toReturn["hash"][] = $key;
             }
             

@@ -43,8 +43,10 @@ class Main{
                 echo shell_exec( $command );
             }
             $file_git_ignore = file_get_contents( ".gitignore" );
-            $file_git_ignore .= "\n\n" . $project_path  . "\n";
-            $new_file = file_put_contents( ".gitignore" , $file_git_ignore );
+            if(strpos($file_git_ignore, $project_path) === false){
+                $file_git_ignore .= "\n\n" . $project_path  . "\n";
+                $new_file = file_put_contents( ".gitignore" , $file_git_ignore );
+            }
             
         }
         echo shell_exec( 'chmod 764 ' . $project_path );
