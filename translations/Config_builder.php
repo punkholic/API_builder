@@ -68,7 +68,7 @@ class Config_builder extends Builder
 
         $template = $this->inject_substitute_string ($template, 'CONFIG', $config_array);
         $this->_copy[$final_location] = $template;
-        $this->_includes[] = 'core/config.php';
+        $this->_includes[] = '../core/config.php';
     }
     public function built_ci_project ()
     {

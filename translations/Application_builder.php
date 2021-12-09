@@ -58,9 +58,10 @@ class Application_builder extends Builder
     public function build()
     {
         $this->init();
-
+        
         foreach ($this->_render_list as $builder_name => $builder)
         {
+            
             $builder->build();
             $this->_includes = array_merge($this->_includes, $builder->get_includes());
             $this->_copy = array_merge($this->_copy, $builder->get_copy());
@@ -74,11 +75,57 @@ class Application_builder extends Builder
 
         $include_builder = new Include_builder($this->_config, $this->_mapping_keys);
         $include_builder->set_includes($this->_includes);
+       
         $include_builder->build();
-        
 
+        // Route copier
+        $path_to_copy_from = __DIR__ . "/../api/core/index.php";
+        $path_to_copy_to = __DIR__ . "/../release/core/index.php"; 
+        $get_old_content = file_get_contents( $path_to_copy_from );
+        $replacement = file_put_contents($path_to_copy_to, $get_old_content);
+        
+        $this->build_project();
     }
 
+    public function build_project(  ){
+        if (!isset($this->_config['config']))
+        {
+            throw new Exception('Setting Object Missing', 1);
+        }
+
+        $settings = $this->_config['config'];
+
+        if (!isset($settings['programming-language']))
+        {
+            throw new Exception('Programming Language Missing', 1);
+        }
+
+        $programming_language = $settings['programming-language'];
+
+        switch ($programming_language)
+        {
+            case 'laravel':
+                $this->build_laravel();
+                break;
+            default:
+                throw new Exception('Invalid Programming Language', 1);
+                break;
+        }
+    }
+
+    public function build_laravel(){
+        $path = '../release/public/index.php';
+
+        if (!file_exists($path))
+        {
+            throw new Exception("Initialize PHP not set");
+        }
+        // shell_exec("cd source/laravel/");
+        // shell_exec("sudo php Main.php");
+        include_once __DIR__ . "/source/laravel/Main.php" ;
+        // call the function that creates the laravel project and download the release
+
+    }
     /**
      * Destroy Function
      *

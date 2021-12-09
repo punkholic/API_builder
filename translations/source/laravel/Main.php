@@ -9,10 +9,12 @@ include __DIR__."/includes/Common.php";
 class Main{
 
     public function __construct( $jsonFile ) { 
+        
         $_SESSION['global_counter'] = 0;
 
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
         $this->jsonInput = Common::validate_timestamp( $this->jsonInput );
+        
         Common::processEnv();
 
         $this->makeAuth();
@@ -52,5 +54,6 @@ class Main{
         echo shell_exec( 'chmod 764 ' . $project_path );
     }
 }
-$main = new Main("./input.json");
+$json_dir = __DIR__ . "/../../../input.json";
+$main = new Main($json_dir);
 ?>
