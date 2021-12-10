@@ -5,18 +5,19 @@ class Model{
 
     public function __construct($input){
         $this->jsonInput = $input;
-        $this->filePath = PROJECT_PATH . "/app/Models/";
+       
+        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Models/";
         $this->processModel();
     }
 
     public function processModel(){
-        foreach($this->jsonInput as $data){
+        foreach( $this->jsonInput->data as $data){
             $this->processEach($data);
         }
     }
    
     public function processEach($modelData){
-      
+       
         $exist = glob( $this->filePath . $modelData->tableName . ".php");
         if( $exist )
         {
@@ -36,8 +37,12 @@ class Model{
         
 
         //creating model
-        echo shell_exec("cd ". PROJECT_PATH . " && " . Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
-        
+        // echo getcwd(); // For getting the current directory
+        chdir('../release/'); // going to release 
+       
+ 
+        echo shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
+
         $fillable = array_merge($modelData->model->fillable, $undefined);
 
         // $insertingText = "\n\tprotected \$table = \n\n";

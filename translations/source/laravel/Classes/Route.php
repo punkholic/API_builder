@@ -4,20 +4,20 @@ class Route{
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
         $this->routeTo = ["view", "add", "edit", "delete"];
-        $this->filePath = PROJECT_PATH . "/routes/api.php";
+        $this->filePath = __DIR__ . PROJECT_PATH . "/routes/api.php";
         $this->processRoute();
     }
 
     public function processRoute(){
-        foreach($this->jsonInput as $data){
+        foreach( $this->jsonInput->data as $data ) {
             $this->processEach($data);
         }
     }
 
-    public function processEach($modelData){
+    public function processEach( $modelData ){
 
-        $toWrite = file_get_contents($this->filePath);
-
+        $toWrite = file_get_contents( $this->filePath );
+       
         foreach($this->routeTo as $i){
             foreach($modelData->model->$i as $j){
 

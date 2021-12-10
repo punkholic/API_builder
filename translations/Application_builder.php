@@ -4,6 +4,7 @@ include_once 'Init_builder.php';
 include_once 'Include_builder.php';
 include_once 'Config_builder.php';
 include_once 'Copy_builder.php';
+include_once 'Zip_builder.php';
 
 /**
  * Class: Application Builder
@@ -120,11 +121,17 @@ class Application_builder extends Builder
         {
             throw new Exception("Initialize PHP not set");
         }
-        // shell_exec("cd source/laravel/");
-        // shell_exec("sudo php Main.php");
+        
         include_once __DIR__ . "/source/laravel/Main.php" ;
-        // call the function that creates the laravel project and download the release
+        /**
+         * call the function that creates the laravel project and download the release
+         * Code below
+         *  */ 
+        $zip_builder = new Zip_builder( $this->_config);
 
+        $zip_file_name = $zip_builder->create_zip_archieve();
+        $zip_builder->download_zip( $zip_file_name );
+        
     }
     /**
      * Destroy Function

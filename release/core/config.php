@@ -9,9 +9,12 @@ class Config
   {
     $this->_config = [
 
-			"app_name"	=>	"test",
+			"app_name"	=>	"try",
 			"programming-language"	=>	"laravel",
 			"mode"	=>	"development",
+			"database_name"	=>	"test",
+			"database_username"	=>	"root",
+			"database_password"	=>	"",
 
     ];
   }

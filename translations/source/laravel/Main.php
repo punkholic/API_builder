@@ -15,17 +15,24 @@ class Main{
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
         $this->jsonInput = Common::validate_timestamp( $this->jsonInput );
         
-        Common::processEnv();
+        Common::processEnv( $this->jsonInput );
 
-        $this->makeAuth();
+        // $this->makeAuth();
     
-        Common::override_env();        
+        Common::override_env();  
+
         $this->model = new Model( $this->jsonInput );
         $this->route = new Route( $this->jsonInput );
         $this->controller = new Controller( $this->jsonInput );
 
         $this->migration = new Migration( $this->jsonInput );
-
+        /**
+         * t the end we need to flush the .env that we had
+         * The function is to be called at the last line iff any addition
+         * we do it above
+         *  */       
+        Common::clear_initial_env();
+        
     }
     
     
@@ -55,5 +62,6 @@ class Main{
     }
 }
 $json_dir = __DIR__ . "/../../../input.json";
+
 $main = new Main($json_dir);
 ?>

@@ -51,9 +51,20 @@ class Common{
      * Function to validate and add if timestamp key is set to true in the input.json file.
      */
 
-    public function processEnv(){
-        $data = file_get_contents( ".env" );
-        
+    public function processEnv( $jsonInput ){
+       
+        $path = __DIR__ . "/../";
+        $data = file_get_contents( $path .".env", TRUE );
+
+        $data = $data . "PROJECT_PATH=/../../../../release";
+        $data = $data . "\nAPP_NAME=" . $jsonInput->config->app_name;
+        $data = $data . "\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\n";
+        $data = $data . "DB_DATABASE=" . $jsonInput->config->database_name;
+        $data = $data . "\nDB_USERNAME=" . $jsonInput->config->database_username;
+        $data = $data . "\nDB_PASSWORD=" . $jsonInput->config->database_password;
+
+        file_put_contents( $path .".env", $data);
+       
         preg_match_all( '/\w+=([\w\S]+){0,}/s' , $data, $matches);
         $envData = Common::makeAssoc($matches[0]);
         
@@ -74,9 +85,10 @@ class Common{
     }
 
     public function override_env() {
-        $gotData = file_get_contents(".env");
-        $toOverride = file_get_contents(PROJECT_PATH . "/.env");
-        
+        $path = __DIR__ . "/../";
+        $gotData = file_get_contents( $path . ".env" );
+        $toOverride = file_get_contents( __DIR__ . PROJECT_PATH . "/.env");
+       
         preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $gotData, $rawGotData);
         preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $toOverride, $rawToOverride);
         
@@ -84,6 +96,7 @@ class Common{
         $rawToOverride = self::makeAssoc($rawToOverride[0]);
 
         $finalData = array_merge($rawToOverride, $rawGotData);
+     
         $toWrite = ""; $count = 0;
         foreach($finalData as $key => $value){
             if(!in_array($key, Constant::PROJECT_ENV)){
@@ -92,7 +105,9 @@ class Common{
                 if ($count % 4 == 0 ) $toWrite .= "\n\n";
             }
         }
-        file_put_contents(PROJECT_PATH . "/.env", $toWrite);
+       
+        file_put_contents( __DIR__ . PROJECT_PATH . "/.env", $toWrite);
+      
     }
 
     public static function validate_timestamp( $json )
@@ -155,5 +170,16 @@ class Common{
         }
               
     }
+
+    /**
+     * Function to clear the .env file after it's work is done
+     */
+    public function clear_initial_env() {
+        $path = __DIR__ . "/../";
+        $data = "";
+        file_put_contents( $path .".env", $data);
+        return true;
+    }
+    
 }
 ?>

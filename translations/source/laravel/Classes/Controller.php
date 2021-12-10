@@ -3,20 +3,23 @@ class Controller{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = PROJECT_PATH . "/app/Http/Controllers/";
+        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Http/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
         $this->processModel();
     }
     
     public function processModel(){
-        foreach($this->jsonInput as $data){
-            echo shell_exec("cd " . PROJECT_PATH . " && " . Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
+        chdir('../release/');
+        foreach($this->jsonInput->data as $data){
+            
+            echo shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
             $this->processEach($data);
         }
     }
 
     public function processEach($modelData){
         $this->controllerCode = file_get_contents("$this->filePath$modelData->controller.php");
+       
         foreach($this->toProcess as $value){
             $this->$value($modelData->model->$value, $modelData->model->fields, $modelData) . "\n\n";
         }

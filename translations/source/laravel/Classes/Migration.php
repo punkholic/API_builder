@@ -4,10 +4,11 @@ class Migration{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = PROJECT_PATH . "/database/migrations/";
+        $this->filePath = __DIR__ . PROJECT_PATH . "/database/migrations/";
         $this->migrations = $this->getFileList();
         $this->processModel();
-        echo shell_exec("cd " . PROJECT_PATH . " && " . Constant::COMMANDS['MIGRATE_FRESH']);
+        chdir('../release/'); 
+        echo shell_exec( Constant::COMMANDS['MIGRATE_FRESH'] );
     }
     
     private function getFileList(){
@@ -31,8 +32,8 @@ class Migration{
     }
 
     private function processModel(){
-        foreach( $this->jsonInput as $data ){
-            if( array_key_exists( strtolower($data->tableName), $this->migrations )){
+        foreach( $this->jsonInput->data as $data ){
+            if( array_key_exists( strtolower( $data->tableName ), $this->migrations )){
                 echo "Ignoring table $data->tableName, reason: already exist If you have any additions please drop the table from your side and run migrations.\n";
                 continue;
             }
@@ -40,11 +41,12 @@ class Migration{
         }
     }
 
-    private function processEach($modelData){
+    private function processEach( $modelData ){
         $tableName = strtolower( $modelData->tableName );
         $phaseOne = str_replace("PLACEHOLDER1", $tableName, Constant::COMMANDS['MAKE_MIGRATION']);
         $secondPhase = str_replace("PLACEHOLDER2", $modelData->tableName, $phaseOne);
-        shell_exec("cd " . PROJECT_PATH . " && $secondPhase");
+        
+        shell_exec($secondPhase);
 
         //generate code for recently created file
         $this->insertField( $tableName, $this->processFields( $modelData->model->fields, $tableName ) );
