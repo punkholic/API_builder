@@ -1,8 +1,14 @@
 <?php
 
-use Symfony\Component\VarDumper\VarDumper;
 
 require 'vendor/autoload.php';
+
+header("Access-Control-Allow-Origin", "*");
+header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+
+var_dump("hhh");
+die();
 
 Flight::route('/', function(){
     require "ui/index.html";
@@ -11,7 +17,8 @@ Flight::route('/', function(){
 Flight::route('/save/@id:[0-9]+', function ( $id ) {
     
     $json = file_get_contents('php://input');
-    
+    var_dump( $json );
+    die();
     $_POST = json_decode($json, true);
     chdir( "../");
     $root_dir = getcwd();
