@@ -77,13 +77,7 @@ class Application_builder extends Builder
         $include_builder = new Include_builder($this->_config, $this->_mapping_keys);
         $include_builder->set_includes($this->_includes);
        
-        $include_builder->build();
-
-        // Route copier
-        $path_to_copy_from = __DIR__ . "/../api/core/index.php";
-        $path_to_copy_to = __DIR__ . "/../release/core/index.php"; 
-        $get_old_content = file_get_contents( $path_to_copy_from );
-        $replacement = file_put_contents($path_to_copy_to, $get_old_content);
+        $include_builder->build();       
         
         $this->build_project();
     }
