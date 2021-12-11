@@ -7,9 +7,7 @@ class Config
 
   public function __construct ()
   {
-    $this->_config = [
-{{{CONFIG}}}
-    ];
+    // $this->_config = [ {{{CONFIG}}} ];
   }
 
   /**

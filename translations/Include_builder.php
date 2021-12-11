@@ -49,6 +49,9 @@ class Include_builder extends Builder
             case 'laravel':
                 $this->build_laravel();
                 break;
+            case 'codeigniter':
+                $this->build_codeigniter();
+                break;
             default:
                 throw new Exception('Invalid Programming Language', 1);
                 break;
@@ -65,7 +68,22 @@ class Include_builder extends Builder
 
         return $list;
     }
+    private function build_codeigniter ()
+    {
+        $path = '../release/public/index.php';
 
+        if (!file_exists($path))
+        {
+            throw new Exception("Initialize PHP not set");
+        }
+
+        // $template = file_get_contents('../release/public/index.php');
+        // $include_code = implode("\n", $this->process_include_php($this->_includes));
+        // $middleware_code = implode("\n", $this->_middleware);
+        // $template = str_replace('// {{{INCLUDEFILES}}}', $include_code, $template);
+        // $template = str_replace('// {{{MIDDLEWARE}}}', $middleware_code, $template);
+        // file_put_contents('../release/public/index.php', $template);
+    }
 
     private function build_laravel ()
     {
