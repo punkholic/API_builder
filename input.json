@@ -1,7 +1,7 @@
 {
     "config": {
         "app_name": "try",
-        "programming-language" : "laravel",
+        "programming-language" : "codeigniter",
         "mode": "development",
         "database_name" : "test",
         "database_username" : "root",

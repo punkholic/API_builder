@@ -48,6 +48,9 @@ class Init_builder extends Builder
             case 'laravel':
                 $this->recurse_copy('../initialize_laravel', '../release');
                 break;
+            case 'codeigniter':
+                $this->recurse_copy('../initialize_codeigniter', '../release');
+                break;
             default:
                 throw new Exception('Invalid Programming Language', 1);
                 break;

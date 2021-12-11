@@ -30,6 +30,7 @@ class Application_builder extends Builder
      */
     public function __construct( $config ) 
     {
+        $this->destroy();
         $this->_config = json_decode( $config , TRUE );
         $this->_mapping_keys = isset($this->_config['mapping']) ? $this->_config['mapping'] : [];
 
@@ -102,12 +103,33 @@ class Application_builder extends Builder
             case 'laravel':
                 $this->build_laravel();
                 break;
+            case 'codeigniter':
+                $this->build_codeigniter();
+                break;
             default:
                 throw new Exception('Invalid Programming Language', 1);
                 break;
         }
     }
+    public function build_codeigniter(){
+        $path = '../release/spark';
 
+        if (!file_exists($path))
+        {
+            throw new Exception("Initialize PHP not set");
+        }
+        
+        include_once __DIR__ . "/source/CodeIgniter/Main.php";
+        /**
+         * call the function that creates the laravel project and download the release
+         * Code below
+         *  */ 
+        // $zip_builder = new Zip_builder( $this->_config);
+
+        // $zip_file_name = $zip_builder->create_zip_archieve();
+        // $zip_builder->download_zip( $zip_file_name );
+        
+    }
     public function build_laravel(){
         $path = '../release/public/index.php';
 
@@ -121,10 +143,10 @@ class Application_builder extends Builder
          * call the function that creates the laravel project and download the release
          * Code below
          *  */ 
-        $zip_builder = new Zip_builder( $this->_config);
+        // $zip_builder = new Zip_builder( $this->_config);
 
-        $zip_file_name = $zip_builder->create_zip_archieve();
-        $zip_builder->download_zip( $zip_file_name );
+        // $zip_file_name = $zip_builder->create_zip_archieve();
+        // $zip_builder->download_zip( $zip_file_name );
         
     }
     /**
