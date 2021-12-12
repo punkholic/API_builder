@@ -120,11 +120,54 @@
         </div>
 
      </div>
+       <div class="input">
+         <label for="fillableFields">Fillable For Model</label>
+             <input
+              type="text"
+              required
+              class="form-control"
+              v-model="form.fillableFields"
+              name="fillableFields"
+              id="fillableFields"
+            />
+             <p>
+              <small
+                ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+              >
+            </p>
+       </div>
+       <div class="input">
+         <label for="guarded_fields">Guarded Fields For Model</label>
+             <input
+              type="text"
+              required
+              class="form-control"
+              v-model="form.guarded_fields"
+              name="guarded_fields"
+              id="guarded_fields"
+            />
+             <p>
+              <small
+                ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+              >
+            </p>
+       </div>
+       <div class="checkbox">
+         <label for="timestamp">Create Timestamp</label>
+             <input
+              type="checkbox"              
+              v-model="form.timestamp"
+              name="timestamp"
+              id="timestamp"
+            />
+            
+       </div>
       <div class="input hobbies">
             <button class="btn btn-default"  @click="saveData()">save data</button>
          
        </div>
-         
+        
+       
         <div class="submit">
           <button @click="onSubmit">Submit</button>
         </div>
@@ -157,20 +200,23 @@ import axios from 'axios';
     },
     methods: {
       saveData() {
-
-
-         
+            let Guarded = this.form.guarded_fields;
+            let guarded_fields_needed = Guarded.split(",");
+            let fillable_field = this.form.fillableFields;
+            let fillable_field_needed = fillable_field.split(",");
+            let timestamp = this.form.timestamp;
+ 
+            
            let data_payload = {
              tableName:this.tableName,
              controller: this.tableName + "Controller",
 
              model: {
-
                fields: this.model = this.selected,  
-               guarded: [],         
-               fillable: [],
+               guarded: guarded_fields_needed,         
+               fillable: fillable_field_needed,
                mapping: [],
-               timestamps: true,
+               timestamps: timestamp,
                view: [],
                add: [],
                edit: [],
@@ -178,6 +224,7 @@ import axios from 'axios';
              },
             
           };
+        
         this.data.push( data_payload );
       },
        addModel(){
@@ -185,6 +232,7 @@ import axios from 'axios';
       this.xyz = models.split(":");
       this.tableName = this.xyz[0];
       this.model = this.xyz[1].split(",");
+     
      
     },
     
@@ -210,16 +258,15 @@ import axios from 'axios';
         };
 
         let id = (this.random = Math.floor(Math.random() * 1000000000) + 1);
+       
+
+       
+  // console.log(formData);
+  // return;
         axios.post('http://localhost:9000/save/'+id ,formData)
         .then(res => console.log(res) )
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
 
-        //  this.form = {};
-        //  this.appName = '';
-        //  this.programmingLanguage = '';
-        //  this.model = '';
-        //  this.selected = '';
-        //  this.data_setup = [];
       }
 
      

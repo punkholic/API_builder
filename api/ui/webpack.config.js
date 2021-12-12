@@ -8,6 +8,9 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+  devServer: {
+    proxy: 'http://localhost:9000'
+  },
   module: {
     rules: [
       {
