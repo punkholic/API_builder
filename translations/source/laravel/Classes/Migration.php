@@ -8,7 +8,7 @@ class Migration{
         $this->migrations = $this->getFileList();
         $this->processModel();
         chdir('../release/'); 
-        echo shell_exec( Constant::COMMANDS['MIGRATE_FRESH'] );
+        // echo shell_exec( Constant::COMMANDS['MIGRATE_FRESH'] );
     }
     
     private function getFileList(){

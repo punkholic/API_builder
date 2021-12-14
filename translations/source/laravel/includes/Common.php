@@ -51,7 +51,7 @@ class Common{
      * Function to validate and add if timestamp key is set to true in the input.json file.
      */
 
-    public function processEnv( $jsonInput ){
+    public static function processEnv( $jsonInput ){
        
         $path = __DIR__ . "/../";
         $data = file_get_contents( $path .".env", TRUE );
@@ -75,7 +75,7 @@ class Common{
         }
     }
 
-    public function makeAssoc( $data ){
+    public static function makeAssoc( $data ){
         $toReturn = [];
         foreach($data as $value){
             $toPut = explode("=", $value);
@@ -84,7 +84,7 @@ class Common{
         return $toReturn;
     }
 
-    public function override_env() {
+    public static function override_env() {
         $path = __DIR__ . "/../";
         $gotData = file_get_contents( $path . ".env" );
         $toOverride = file_get_contents( __DIR__ . PROJECT_PATH . "/.env");
@@ -144,7 +144,7 @@ class Common{
     /**
      * Function to Generate / write the dynamic script in server.sh file.
      */
-    public function get_basic_script_commands( $project_path )
+    public static function get_basic_script_commands( $project_path )
     {
         if( isset( $project_path ) )
         {
@@ -174,7 +174,7 @@ class Common{
     /**
      * Function to clear the .env file after it's work is done
      */
-    public function clear_initial_env() {
+    public static function clear_initial_env() {
         $path = __DIR__ . "/../";
         $data = "";
         file_put_contents( $path .".env", $data);

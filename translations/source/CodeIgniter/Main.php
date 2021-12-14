@@ -8,6 +8,7 @@ class Main{
         $this->route = new Route( $this->jsonInput );
         // $this->model = new Model( $this->jsonInput );
     }
+
 }
 
 $json_dir = __DIR__ . "/../../../input.json";
