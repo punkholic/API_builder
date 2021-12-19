@@ -25,7 +25,7 @@
             required
           >
             <option value="laravel">Laravel</option>
-            <option value="codeiginator">Codeiginator</option>
+            <option value="codeigniter">Codeigniter</option>
           </select>
         </div>
          <div class="input">
@@ -56,7 +56,6 @@
             type="text"
             class="form-control"
             v-model="databasePassword"
-            required
             id=""
             placeholder="Database Password (eg: root)"
           />
@@ -152,6 +151,222 @@
               >
             </p>
        </div>
+
+        <h5 class="text-center">Model View Setup</h5>
+      <hr />
+
+            <div class="input">
+                <label for="view_fields">View Fields For Model</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.view_fields"
+                      name="view_fields"
+                      id="view_fields"
+                    />
+                    <p>
+                      <small
+                        ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+                      >
+                    </p>
+              </div>
+
+              <div class="input">
+                <label for="view_request_route">View request route</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.view_request_route"
+                      name="view_request_route"
+                      id="view_request_route"
+                    />
+                    <p>
+                      <small
+                        ><strong>(eg: /testView2/{id} )</strong></small
+                      >
+                    </p>
+              </div>
+              <div class="input">
+                <label for="view_request_name">View request name</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.view_request_name"
+                      name="view_request_name"
+                      id="view_request_name"
+                    />
+                    
+              </div>
+
+        <h5 class="text-center">Model Add Setup</h5>
+        <hr />
+       <div class="input">
+         <label for="add_fields">Add Fields For Model</label>
+             <input
+              type="text"
+              required
+              class="form-control"
+              v-model="form.add_fields"
+              name="add_fields"
+              id="add_fields"
+            />
+             <p>
+              <small
+                ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+              >
+            </p>
+       </div>
+
+       
+
+       <div class="input">
+         <label for="add_request_route">Add request route</label>
+             <input
+              type="text"
+              required
+              class="form-control"
+              v-model="form.add_request_route"
+              name="add_request_route"
+              id="add_request_route"
+            />
+             <p>
+              <small
+                ><strong>(eg: /testView2/add/{id}/{value} )</strong></small
+              >
+            </p>
+       </div>
+       <div class="input">
+         <label for="add_request_name">Add request name</label>
+             <input
+              type="text"
+              required
+              class="form-control"
+              v-model="form.add_request_name"
+              name="add_request_name"
+              id="add_request_name"
+            />
+            
+       </div>
+
+
+      <h5 class="text-center">Model Edit Setup</h5>
+      <hr />
+
+            <div class="input">
+                <label for="edit_fields">Edit Fields For Model</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.edit_fields"
+                      name="edit_fields"
+                      id="edit_fields"
+                    />
+                    <p>
+                      <small
+                        ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+                      >
+                    </p>
+              </div>
+
+              <div class="input">
+                  <label for="edittype"
+                  >Edit request Type</label
+                >
+                  <select
+                    class="form-control"
+                    v-model="editRequest"
+                    required
+                  >
+                      <option value="PUT" selected >PUT</option>
+                    <option value="POST">POST</option>
+                    <option value="PATCH">PATCH</option>
+                  </select>
+                </div>
+
+              <div class="input">
+                <label for="edit_request_route">Edit request route</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.edit_request_route"
+                      name="edit_request_route"
+                      id="edit_request_route"
+                    />
+                    <p>
+                      <small
+                        ><strong>(eg: /testView2/edit/{id}/{value} )</strong></small
+                      >
+                    </p>
+              </div>
+              <div class="input">
+                <label for="edit_request_name">Edit request name</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.edit_request_name"
+                      name="edit_request_name"
+                      id="edit_request_name"
+                    />
+                    
+              </div>
+
+            <h5 class="text-center">Model Delete Setup</h5>
+      <hr />
+
+            <div class="input">
+                <label for="delete_fields">Delete Fields For Model</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.delete_fields"
+                      name="delete_fields"
+                      id="delete_fields"
+                    />
+                    <p>
+                      <small
+                        ><strong>( Format :field1,field2,...,fieldn;)</strong></small
+                      >
+                    </p>
+              </div>
+
+              <div class="input">
+                <label for="delete_request_route">Delete request route</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.delete_request_route"
+                      name="delete_request_route"
+                      id="delete_request_route"
+                    />
+                    <p>
+                      <small
+                        ><strong>(eg: /testView2/delete/{id}/{value} )</strong></small
+                      >
+                    </p>
+              </div>
+              <div class="input">
+                <label for="delete_request_name">Delete request name</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.delete_request_name"
+                      name="delete_request_name"
+                      id="delete_request_name"
+                    />
+                    
+              </div>
+
+             
+
        <div class="checkbox">
          <label for="timestamp">Create Timestamp</label>
              <input
@@ -163,7 +378,7 @@
             
        </div>
       <div class="input hobbies">
-            <button class="btn btn-default"  @click="saveData()">save data</button>
+            <button class="btn btn-default"  @click="saveData()">Save Data & Add More Models</button>
          
        </div>
         
@@ -183,6 +398,7 @@ import axios from 'axios';
       return {
               appName:'',
               programmingLanguage:'',
+              editRequest: '',
               databaseName:'',
               databaseUsername:'',
               databasePassword:'',
@@ -192,10 +408,6 @@ import axios from 'axios';
               // data_setup:[{}],
               checkedNames:[],
               data:[],
-              
-
-
-       
       }
     },
     methods: {
@@ -205,49 +417,139 @@ import axios from 'axios';
             let fillable_field = this.form.fillableFields;
             let fillable_field_needed = fillable_field.split(",");
             let timestamp = this.form.timestamp;
- 
+            
+            // For add fields in model 
+
+            let add_fields = this.form.add_fields;
+            let add_fields_data = add_fields.split(",");
+            let add_request_route = this.form.add_request_route;
+            let add_request_type = "POST";
+            let add_request_name = this.form.add_request_name;
+
+            let add_payload = {
+              "fields": add_fields_data,
+              "request": {
+                "type": add_request_type,
+                "route": add_request_route,
+                "name": add_request_name
+              }
+            };
+
+            /**
+             * For getting the edit fields data from UI and creating the 
+             * edit payload
+             */
+            
+            let edit_fields = this.form.edit_fields;
+            let edit_fields_data = edit_fields.split(",");
+            let edit_request_route = this.form.edit_request_route;
+            let edit_request_type = this.editRequest;
+            let edit_request_name = this.form.edit_request_name;
+
+            let edit_payload = {
+              "fields": edit_fields_data,
+              "request": {
+                "type": edit_request_type,
+                "route": edit_request_route,
+                "name": edit_request_name
+              }
+            };
+            /**
+             * For getting the Delete fields data from UI and creating the 
+             * delete payload
+             */
+            
+            let delete_fields = this.form.delete_fields;
+            let delete_fields_data = delete_fields.split(",");
+            let delete_request_route = this.form.delete_request_route;
+            let delete_request_type = "DELETE";
+            let delete_request_name = this.form.delete_request_name;
+
+            let delete_payload = {
+              "fields": delete_fields_data,
+              "request": {
+                "type": delete_request_type,
+                "route": delete_request_route,
+                "name": delete_request_name
+              }
+            };
+
+            /**
+             * For getting the View fields data from UI and creating the 
+             * view payload
+             */
+            
+            let view_fields = this.form.view_fields;
+            let view_fields_data = view_fields.split(",");
+            let view_request_route = this.form.view_request_route;
+            let view_request_type = "GET";
+            let view_request_name = this.form.view_request_name;
+
+            let view_payload = {
+              "fields": view_fields_data,
+              "request": {
+                "type": view_request_type,
+                "route": view_request_route,
+                "name": view_request_name
+              }
+            };
             
            let data_payload = {
              tableName:this.tableName,
              controller: this.tableName + "Controller",
-
              model: {
                fields: this.model = this.selected,  
                guarded: guarded_fields_needed,         
                fillable: fillable_field_needed,
                mapping: [],
                timestamps: timestamp,
-               view: [],
-               add: [],
-               edit: [],
-               delete: []
+               view: view_payload,
+               add: add_payload,
+               edit: edit_payload,
+               delete: delete_payload
              },
             
           };
-        
         this.data.push( data_payload );
+        /**
+         * Unsetting all The fields after the data are pushed in the global array
+         */
+        this.tableName = "";
+        this.form.modelData = "";
+        this.form.guarded_fields = "";
+        this.form.fillableFields = "";
+        this.form.timestamp = 0;
+        this.form.add_fields = "";
+        this.form.add_request_route = "";
+        this.form.add_request_name = "";
+        this.form.edit_fields = "";
+        this.form.edit_request_route = "";
+        this.form.edit_request_name = "";
+        this.form.delete_fields = "";
+        this.form.delete_request_route = "";
+        this.form.delete_request_name = "";
+        this.form.view_fields = "";
+        this.form.view_request_route = "";
+        this.form.view_request_name = "";
+        alert( "Model info added successfully!" );
       },
+
        addModel(){
       let models = this.form.modelData;
       this.xyz = models.split(":");
       this.tableName = this.xyz[0];
       this.model = this.xyz[1].split(",");
-     
-     
     },
     
       onSubmit () {
-       
          let config = {
-           app_name : this.appName,
+          app_name : this.appName,
           programming_langauge: this.programmingLanguage,
           mode: 'development',
           database_name:this.databaseName,
           database_username:this.databaseUsername,
           database_password:this.databasePassword,
          };
-        
-
         
         let formData = {
 
@@ -259,14 +561,12 @@ import axios from 'axios';
 
         let id = (this.random = Math.floor(Math.random() * 1000000000) + 1);
        
-
-       
-  // console.log(formData);
-  // return;
+        
         axios.post('http://localhost:9000/save/'+id ,formData)
-        .then(res => console.log(res) )
+        .then(function(response){
+          self.$router.push('/completion/' + id,formData );
+        } )
         .catch(error => console.log(error));
-
       }
 
      

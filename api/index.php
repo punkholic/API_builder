@@ -10,17 +10,38 @@ require 'vendor/autoload.php';
     });
     
     Flight::route('/save/@id:[0-9]+', function ( $id ) {
-        header("Access-Control-Allow-Origin: *" );
-        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,HEAD,OPTIONS');
-        header("Access-Control-Allow-Headers: Origin,X-Requested-With,Content-Type,Accept,x-client-key,x-client-token,x-client-secret,Authorization"); 
-       
-        $json = file_get_contents('php://input');
-   
-        $payload_data = json_decode($json, true);
-       
-        // $payload_data['config']['programming-language'] = $payload_data['config']['programming_language'];
-        // unset($payload_data['config']['programming_language']);
         
+        if (isset( $_SERVER['HTTP_ORIGIN'] )) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        }
+    
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    
+            exit(0);
+        }
+        
+        $json = file_get_contents('php://input', TRUE);
+       
+        $payload_data = json_decode($json, true);
+        foreach( $payload_data['config'] as $key => $value ){
+         
+            if( $key == 'programming_langauge') {
+                unset($payload_data['config'][$key]);
+                $key = "programming-language";
+                $payload_data['config'][$key] = $value;
+
+            }
+        }   
+       
         chdir( "../");
         $root_dir = getcwd();
         
@@ -33,9 +54,8 @@ require 'vendor/autoload.php';
         $uploads_root = getcwd();
        
         // Creating seperate folders for project type
-        var_dump($payload_data);
-        die();
-        $language = $payload_data['config']['programming_language'];
+        
+        $language = $payload_data['config']['programming-language'];
         
         $uc_lang = ucfirst( $language );
        
@@ -47,6 +67,7 @@ require 'vendor/autoload.php';
         if ( !file_exists( $path .'/' . $id . '.json')) {
             fopen( $path . '/' . $id . '.json', "w");
         }
+    
         file_put_contents( $path. '/' . $id . '.json', json_encode($payload_data));
     
         echo json_encode([
@@ -58,10 +79,23 @@ require 'vendor/autoload.php';
     
 
     Flight::route('/retrieve/@id:[0-9]+', function ( $id ) {
-        header("Access-Control-Allow-Origin: *" );
-        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,HEAD,OPTIONS');
-        header("Access-Control-Allow-Headers: Origin,X-Requested-With,Content-Type,Accept,x-client-key,x-client-token,x-client-secret,Authorization"); 
-        
+        if (isset( $_SERVER['HTTP_ORIGIN'] )) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        }
+    
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    
+            exit(0);
+        }
         chdir( "../uploads");
         $search_dir = getcwd();
         $to_match = $id . ".json";
@@ -75,7 +109,6 @@ require 'vendor/autoload.php';
                 $json_name = $dta[$count-1];
                 if($json_name == $to_match )
                 {
-                    
                     $json_matches[] = $dta[$count-2] . "/" . $json_name ;
                 }
             }
@@ -89,7 +122,97 @@ require 'vendor/autoload.php';
         exit;
     }, 'GET');
 
-  
+    Flight::route('/build_project/@id:[0-9]+', function ( $id ) {
+        
+        if (isset( $_SERVER['HTTP_ORIGIN'] )) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        }
+
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+            exit(0);
+        }
+        
+        $json = file_get_contents('php://input', TRUE);
+
+        $payload_data = json_decode($json, true);
+        $language = $payload_data['programming_language'];
+
+        chdir( "../uploads");
+        $root_dir = getcwd();
+       
+        
+        $uc_lang = ucfirst( $language );
+       
+        $path = $root_dir ."/" . $uc_lang;
+        
+        $json_data = file_get_contents( $path. '/' . $id . '.json');
+       
+        chdir("../translations");
+        
+        include_once(getcwd() . "/Application_builder.php");
+        
+        $app = new Application_builder($json_data);
     
+        $zip_link = $app->build();
+
+        echo json_encode([
+            'zip_link' => $zip_link
+        ]);
+        http_response_code(200);
+        exit;
+    }, 'POST');
+    
+    Flight::route('/download_zip', function () {
+        
+        if (isset( $_SERVER['HTTP_ORIGIN'] )) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        }
+
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+            exit(0);
+        }
+        
+        $json = file_get_contents('php://input', TRUE);
+
+        $payload_data = json_decode($json, true);
+        $zip_path = $payload_data['zip_path'];
+
+        
+        if (file_exists($zip_path)) {
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename="' . basename($zip_path) . '"');
+            header('Content-Length: ' . filesize($zip_path));
+            flush();
+         }
+        
+       
+        echo json_encode([
+            'success' => "Success"
+        ]);
+        http_response_code(200);
+        exit;
+    }, 'POST');
 
 Flight::start();
+
+

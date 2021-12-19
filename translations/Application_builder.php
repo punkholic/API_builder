@@ -60,7 +60,7 @@ class Application_builder extends Builder
     public function build()
     {
         $this->init();
-        
+       
         foreach ($this->_render_list as $builder_name => $builder)
         {
             
@@ -80,7 +80,7 @@ class Application_builder extends Builder
        
         $include_builder->build();       
         
-        $this->build_project();
+        return $this->build_project();
     }
 
     public function build_project(  ){
@@ -101,10 +101,10 @@ class Application_builder extends Builder
         switch ($programming_language)
         {
             case 'laravel':
-                $this->build_laravel();
+                return $this->build_laravel();
                 break;
             case 'codeigniter':
-                $this->build_codeigniter();
+                return $this->build_codeigniter();
                 break;
             default:
                 throw new Exception('Invalid Programming Language', 1);
@@ -124,11 +124,10 @@ class Application_builder extends Builder
          * call the function that creates the laravel project and download the release
          * Code below
          *  */ 
-        // $zip_builder = new Zip_builder( $this->_config);
+        // $zip_builder = new Zip_builder( $this->_config );
 
         // $zip_file_name = $zip_builder->create_zip_archieve();
-        // $zip_builder->download_zip( $zip_file_name );
-        
+       
     }
     public function build_laravel(){
         $path = '../release/public/index.php';
@@ -143,10 +142,11 @@ class Application_builder extends Builder
          * call the function that creates the laravel project and download the release
          * Code below
          *  */ 
-        // $zip_builder = new Zip_builder( $this->_config);
+        $zip_builder = new Zip_builder( $this->_config);
 
-        // $zip_file_name = $zip_builder->create_zip_archieve();
-        // $zip_builder->download_zip( $zip_file_name );
+        $zip_file_name = $zip_builder->create_zip_archieve();
+        return $zip_file_name;
+        
         
     }
     /**
