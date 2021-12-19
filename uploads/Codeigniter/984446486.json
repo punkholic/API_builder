@@ -1,1 +1,0 @@
-{"config":{"app_name":"ttt","mode":"development","database_name":"localh","database_username":"root","database_password":"","programming-language":"codeigniter"},"data":[{"tableName":"test","controller":"testController","model":{"fields":[],"guarded":["x","y"],"fillable":["x","y"],"mapping":[],"timestamps":true,"view":[],"add":[],"edit":[],"delete":[]}}]}
