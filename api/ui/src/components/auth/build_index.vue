@@ -19,30 +19,44 @@
 
 <script>
 import axios from 'axios';
+
   export default {
       data () {
       return {
-        "zip_path" : ''
-      }
+        "zip_path" : '',
+        "jsonData" : {}      },
+      axios.get("http://localhost:9000/retrieve/" + this.$route.params.id )
+      .then((response) => {
+        this.jsonData = response.data ;
+      }).catch((err) => {
+          console.log(err);
+        // dispatch({type: Actions.FETCH_DATA_ERROR, payload: err})
+      })
     },
     methods: {
+ 
       buildProject() {
-        let formData = {
-            'programming_language' : 'laravel'
-        }
-        axios.post('http://localhost:9000/build_project/' + id ,formData)
+    
+        axios.post('http://localhost:9000/build_project/' + this.$route.params.id ,this.jsonData)
         .then(function(response){
-            this.zip_path = response.zip_link;
+            this.zip_path = response.data.zip_link;
+              console.log(this.data.zip_link);
+            return;
             alert( "Project built successfully!" );
 
         } )
-        .catch(error => alert( "Error building the project !" ));
+        .catch( 
+          error => (response) 
+        // alert( "Error building the project !" )
+        );
 
       },
 
        
     
       downloadProject () {
+        console.log(this.zip_link);
+        return;
          let formData = {
              'zip_path' : this.zip_link
          };

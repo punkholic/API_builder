@@ -408,6 +408,12 @@ import axios from 'axios';
               // data_setup:[{}],
               checkedNames:[],
               data:[],
+              // data_payload : {
+              //   model: {
+              //     fields: {}
+              //   },
+              // }
+              
       }
     },
     methods: {
@@ -493,12 +499,22 @@ import axios from 'axios';
                 "name": view_request_name
               }
             };
-            
+            // let fields = this.selected;
+            // fields.push(this.selected);
+            // // fields = Object>fields;
+            // // console.log(fields);
+            // // return;
+            // fields.forEach(element => {
+            //   console.log(element);
+
+            // });
+            // console.log(fields);
+            // return;
            let data_payload = {
              tableName:this.tableName,
              controller: this.tableName + "Controller",
              model: {
-               fields: this.model = this.selected,  
+               fields:this.selected,
                guarded: guarded_fields_needed,         
                fillable: fillable_field_needed,
                mapping: [],
@@ -510,8 +526,10 @@ import axios from 'axios';
              },
             
           };
-        this.data.push( data_payload );
-        /**
+           
+           this.data.push( data_payload );
+  
+        /** 
          * Unsetting all The fields after the data are pushed in the global array
          */
         this.tableName = "";
@@ -542,6 +560,8 @@ import axios from 'axios';
     },
     
       onSubmit () {
+          // this.$router.push('/completion/1');
+
          let config = {
           app_name : this.appName,
           programming_langauge: this.programmingLanguage,
@@ -561,10 +581,10 @@ import axios from 'axios';
 
         let id = (this.random = Math.floor(Math.random() * 1000000000) + 1);
        
-        
+        let self = this;
         axios.post('http://localhost:9000/save/'+id ,formData)
         .then(function(response){
-          self.$router.push('/completion/' + id,formData );
+          self.$router.push('/completion/' + id );
         } )
         .catch(error => console.log(error));
       }

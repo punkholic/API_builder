@@ -81,6 +81,7 @@ class Application_builder extends Builder
         $include_builder->build();       
         
         return $this->build_project();
+       
     }
 
     public function build_project(  ){

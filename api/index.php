@@ -30,12 +30,12 @@ require 'vendor/autoload.php';
         }
         
         $json = file_get_contents('php://input', TRUE);
-       
+     
         $payload_data = json_decode($json, true);
         foreach( $payload_data['config'] as $key => $value ){
          
             if( $key == 'programming_langauge') {
-                unset($payload_data['config'][$key]);
+                // unset($payload_data['config'][$key]);
                 $key = "programming-language";
                 $payload_data['config'][$key] = $value;
 
@@ -143,9 +143,10 @@ require 'vendor/autoload.php';
         }
         
         $json = file_get_contents('php://input', TRUE);
-
         $payload_data = json_decode($json, true);
-        $language = $payload_data['programming_language'];
+        $language = $payload_data['config']['programming-language'];
+ 
+      
 
         chdir( "../uploads");
         $root_dir = getcwd();
@@ -164,7 +165,8 @@ require 'vendor/autoload.php';
         $app = new Application_builder($json_data);
     
         $zip_link = $app->build();
-
+        var_dump($zip_link);
+        die();
         echo json_encode([
             'zip_link' => $zip_link
         ]);
