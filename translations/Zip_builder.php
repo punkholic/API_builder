@@ -77,24 +77,17 @@ class Zip_builder extends Builder
 
         // Zip archive will be created only after closing object
         $zip->close();
-        return $file_name;
-    }
-
-    public function download_zip( $project_id ) {
         $language = $this->_config['config']['programming-language'];
         $language_ucase = ucfirst( $language );
        
         $path = getcwd() . "/PastProjects/" . $language_ucase;
         
-        $filename = $path . "/" . $project_id . ".zip";
+        $filename = $path . "/" . $file_name . ".zip";
 
-        if (file_exists($filename)) {
-           header('Content-Type: application/zip');
-           header('Content-Disposition: attachment; filename="'.basename($filename).'"');
-           header('Content-Length: ' . filesize($filename));
-           flush();
-        }
+        return $filename;
     }
+
+   
 
 
 }
