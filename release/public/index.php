@@ -1,59 +1,37 @@
 <?php
 
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Http\Request;
-
-define('LARAVEL_START', microtime(true));
+// Path to the front controller (this file)
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 /*
-|--------------------------------------------------------------------------
-| Check If The Application Is Under Maintenance
-|--------------------------------------------------------------------------
-|
-| If the application is in maintenance / demo mode via the "down" command
-| we will load this file so that any pre-rendered content can be shown
-| instead of starting the framework, which could cause an exception.
-|
-*/
+ *---------------------------------------------------------------
+ * BOOTSTRAP THE APPLICATION
+ *---------------------------------------------------------------
+ * This process sets up the path constants, loads and registers
+ * our autoloader, along with Composer's, loads our constants
+ * and fires up an environment-specific bootstrapping.
+ */
 
-if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
-    require __DIR__.'/../storage/framework/maintenance.php';
-}
+// Ensure the current directory is pointing to the front controller's directory
+chdir(__DIR__);
 
-/*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
-*/
+// Load our paths config file
+// This is the line that might need to be changed, depending on your folder structure.
+$pathsConfig = FCPATH . '../app/Config/Paths.php';
+// ^^^ Change this if you move your application folder
+require realpath($pathsConfig) ?: $pathsConfig;
 
-require __DIR__.'/../vendor/autoload.php';
+$paths = new Config\Paths();
 
-// require __DIR__ . '/../core/flight/Flight.php';
+// Location of the framework bootstrap file.
+$bootstrap = rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
+$app       = require realpath($bootstrap) ?: $bootstrap;
 
 /*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request using
-| the application's HTTP kernel. Then, we will send the response back
-| to this client's browser, allowing them to enjoy our application.
-|
-*/
-require_once '../core/config.php';
-
-$app = require_once __DIR__.'/../bootstrap/app.php';
-
-$kernel = $app->make(Kernel::class);
-
-$response = tap($kernel->handle(
-    $request = Request::capture()
-))->send();
-
-$kernel->terminate($request, $response);
-
+ *---------------------------------------------------------------
+ * LAUNCH THE APPLICATION
+ *---------------------------------------------------------------
+ * Now that everything is setup, it's time to actually fire
+ * up the engines and make this app do its thang.
+ */
+$app->run();

@@ -1,12 +1,16 @@
 <?php 
 include __DIR__ . "/Classes/Route.php";
+include __DIR__."/Classes/Constant.php";
+include __DIR__."/Classes/Model.php";
+include __DIR__."/Classes/Controller.php";
 
 class Main{
     public function __construct( $jsonFile ){
         define("PROJECT_PATH", "/../../../../release");
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
         $this->route = new Route( $this->jsonInput );
-        // $this->model = new Model( $this->jsonInput );
+        $this->model = new Model( $this->jsonInput );
+        $this->controller = new Controller( $this->jsonInput );
     }
 
 }
