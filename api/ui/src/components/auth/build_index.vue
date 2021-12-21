@@ -5,11 +5,10 @@
           
        <div class="input hobbies">
             <button class="btn btn-default"  @click="buildProject()">Build project</button>
-         
        </div>
-      <div class="input hobbies">
-            <button class="btn btn-default"  @click="downloadProject()">Download Project</button>
-         
+     
+         <div class="input hobbies">
+            <button class="btn btn-default" id="download_btn"  @click="downloadProject()" style="display: none;">Download project</button>
        </div>
 
       </form>
@@ -23,8 +22,10 @@ import axios from 'axios';
   export default {
       data () {
       return {
-        "zip_path" : '',
-        "jsonData" : {}      },
+        zip_path : '',
+        jsonData : {}
+        },
+      
       axios.get("http://localhost:9000/retrieve/" + this.$route.params.id )
       .then((response) => {
         this.jsonData = response.data ;
@@ -33,38 +34,30 @@ import axios from 'axios';
         // dispatch({type: Actions.FETCH_DATA_ERROR, payload: err})
       })
     },
+   
     methods: {
  
       buildProject() {
-    
+        let self = this;
         axios.post('http://localhost:9000/build_project/' + this.$route.params.id ,this.jsonData)
         .then(function(response){
-            this.zip_path = response.data.zip_link;
-              console.log(this.data.zip_link);
-            return;
+            self.zip_path = response.data.zip_link;
+            let d_btn = document.getElementById("download_btn");
+            d_btn.style.display = "block";
             alert( "Project built successfully!" );
-
         } )
         .catch( 
-          error => (response) 
-        // alert( "Error building the project !" )
-        );
+          (err) => {
+          // console.log(err);
+            let d_btn = document.getElementById("download_btn");
+            d_btn.style.display = "none";
+            alert( "Error building the project !" )
+          });
 
       },
 
-       
-    
       downloadProject () {
-        console.log(this.zip_link);
-        return;
-         let formData = {
-             'zip_path' : this.zip_link
-         };
-        axios.post('http://localhost:9000/download_zip',formData)
-        .then(function(response){
-            alert( "Project Downloaded successfully!" );
-        } )
-        .catch(error => alert( "Error downloading the project !" ));
+          window.location.href = this.zip_path;
       }
 
     }

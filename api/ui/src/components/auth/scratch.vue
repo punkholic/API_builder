@@ -510,6 +510,11 @@ import axios from 'axios';
             // });
             // console.log(fields);
             // return;
+              
+
+            // var parsedyourElement = JSON.parse(JSON.stringify(this.selected))
+            // console.log(parsedyourElement)
+            // return;   
            let data_payload = {
              tableName:this.tableName,
              controller: this.tableName + "Controller",

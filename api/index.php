@@ -165,8 +165,7 @@ require 'vendor/autoload.php';
         $app = new Application_builder($json_data);
     
         $zip_link = $app->build();
-        var_dump($zip_link);
-        die();
+      
         echo json_encode([
             'zip_link' => $zip_link
         ]);
@@ -175,7 +174,7 @@ require 'vendor/autoload.php';
     }, 'POST');
     
     Flight::route('/download_zip', function () {
-        
+       
         if (isset( $_SERVER['HTTP_ORIGIN'] )) {
             header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
             header('Access-Control-Allow-Credentials: true');
@@ -193,20 +192,39 @@ require 'vendor/autoload.php';
 
             exit(0);
         }
-        
+      
         $json = file_get_contents('php://input', TRUE);
-
+       
         $payload_data = json_decode($json, true);
-        $zip_path = $payload_data['zip_path'];
+      
+        $zip_file = $payload_data['zip_path'];
+        $zip_data = explode("/", $zip_file );
+        $uri_count = count( $zip_data );
+        $file_name = $zip_data[$uri_count-1];
+        $file_folder_name = $zip_data[$uri_count-2];
 
-        
-        if (file_exists($zip_path)) {
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="' . basename($zip_path) . '"');
-            header('Content-Length: ' . filesize($zip_path));
-            flush();
-         }
-        
+        chdir("../PastProjects/".$file_folder_name );
+        $projects_dir = getcwd();
+        // echo $projects_dir; 
+        // die();
+        // return redirect($zip_path);
+    //    var_dump($zip_path);
+    //    die();
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="' . basename($file_name) . '"');
+        header('Content-Length: ' . filesize($zip_file));
+        flush();
+        readfile($zip_file);
+        // header('Content-disposition: attachment; filename=Api_builder_project.zip');
+        // header('Content-type: application/zip');
+        // readfile($zip_path);
+
+        // header("Content-type: application/zip");
+        // header("Content-Disposition: attachment; filename=xyz.zip");
+        // header("Pragma: no-cache");
+        // header("Expires: 0");
+        // readfile($zip_file);
+        exit;
        
         echo json_encode([
             'success' => "Success"
