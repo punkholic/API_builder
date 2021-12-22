@@ -62,7 +62,7 @@ class Common{
         $data = $data . "DB_DATABASE=" . $jsonInput->config->database_name;
         $data = $data . "\nDB_USERNAME=" . $jsonInput->config->database_username;
         $data = $data . "\nDB_PASSWORD=" . $jsonInput->config->database_password;
-
+       
         file_put_contents( $path .".env", $data);
        
         preg_match_all( '/\w+=([\w\S]+){0,}/s' , $data, $matches);
@@ -105,7 +105,8 @@ class Common{
                 if ($count % 4 == 0 ) $toWrite .= "\n\n";
             }
         }
-       
+    //    var_dump($toWrite);
+    //    die();
         file_put_contents( __DIR__ . PROJECT_PATH . "/.env", $toWrite);
       
     }

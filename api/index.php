@@ -32,6 +32,7 @@ require 'vendor/autoload.php';
         $json = file_get_contents('php://input', TRUE);
      
         $payload_data = json_decode($json, true);
+       
         foreach( $payload_data['config'] as $key => $value ){
          
             if( $key == 'programming_langauge') {
@@ -147,7 +148,6 @@ require 'vendor/autoload.php';
         $language = $payload_data['config']['programming-language'];
  
       
-
         chdir( "../uploads");
         $root_dir = getcwd();
        
@@ -194,9 +194,9 @@ require 'vendor/autoload.php';
         }
       
         $json = file_get_contents('php://input', TRUE);
-       
-        $payload_data = json_decode($json, true);
       
+        $payload_data = json_decode($json, true);
+     
         $zip_file = $payload_data['zip_path'];
         $zip_data = explode("/", $zip_file );
         $uri_count = count( $zip_data );
@@ -211,10 +211,12 @@ require 'vendor/autoload.php';
     //    var_dump($zip_path);
     //    die();
         header('Content-Type: application/zip');
-        header('Content-Disposition: attachment; filename="' . basename($file_name) . '"');
-        header('Content-Length: ' . filesize($zip_file));
+        header("Content-Type: application/force-download");
+        header('Content-Disposition: attachment; filename="xx.zip"');
+        // header('Content-Length: ' . filesize($zip_file));
         flush();
-        readfile($zip_file);
+        var_dump(readfile($zip_file));
+        die();
         // header('Content-disposition: attachment; filename=Api_builder_project.zip');
         // header('Content-type: application/zip');
         // readfile($zip_path);

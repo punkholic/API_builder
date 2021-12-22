@@ -67,8 +67,45 @@
 
         </div>
 
+<h5 class="text-center">Model Setup</h5>
+      <hr />
+
+            <div class="input">
+                <label for="model_fields">Fields For Model</label>
+                    <input
+                      type="text"
+                      required
+                      class="form-control"
+                      v-model="form.model_fields"
+                      name="model_fields"
+                      id="model_fields"
+                    />
+                    <p>
+                      <small
+                        ><strong>(
+                           Format : modelName:field1..integer|required,field2..string,
+                           ...,fieldn..enum.
+
+                           INFO Notes: The first parameter shhould be model name, followed by : fields name followed by 2 periods
+                           then the data type for that fields.
+                           The data types are {
+                             primary,
+                             string,
+                             integer,
+                             text,
+                             hash,
+                             enum,
+                             date,
+                             decimal,
+                             datetime
+                           }.
+                           )
+                           </strong></small
+                      >
+                    </p>
+              </div>
          
-     <div class="modelset">
+     <!-- <div class="modelset">
         <h5 class="text-center">Model Setup</h5>
       <hr />
        <div class="input">
@@ -118,7 +155,7 @@
                   
         </div>
 
-     </div>
+     </div> -->
        <div class="input">
          <label for="fillableFields">Fillable For Model</label>
              <input
@@ -404,16 +441,9 @@ import axios from 'axios';
               databasePassword:'',
               form:{},
               model: {},
-              selected: [],
-              // data_setup:[{}],
+              // selected: [],
               checkedNames:[],
-              data:[],
-              // data_payload : {
-              //   model: {
-              //     fields: {}
-              //   },
-              // }
-              
+              data:[],  
       }
     },
     methods: {
@@ -499,27 +529,24 @@ import axios from 'axios';
                 "name": view_request_name
               }
             };
-            // let fields = this.selected;
-            // fields.push(this.selected);
-            // // fields = Object>fields;
-            // // console.log(fields);
-            // // return;
-            // fields.forEach(element => {
-            //   console.log(element);
-
-            // });
-            // console.log(fields);
-            // return;
-              
-
-            // var parsedyourElement = JSON.parse(JSON.stringify(this.selected))
-            // console.log(parsedyourElement)
-            // return;   
+            let model_fields = this.form.model_fields;
+            let ind_model_fields = model_fields.split(":");
+            // key : value
+            let tableName = ind_model_fields[0];
+            let ind_model_fields_data = ind_model_fields[1].split(",");
+            let temp_arr = [];
+            ind_model_fields_data.forEach(element => {
+                let final = element.split("..");
+                this.$set(temp_arr, final[0],final[1]);
+               
+            });
+           let fields_p_load =  Object.assign({}, temp_arr);
+           
            let data_payload = {
-             tableName:this.tableName,
-             controller: this.tableName + "Controller",
+             tableName: tableName,
+             controller: tableName + "Controller",
              model: {
-               fields:this.selected,
+               fields: fields_p_load,
                guarded: guarded_fields_needed,         
                fillable: fillable_field_needed,
                mapping: [],
@@ -531,13 +558,13 @@ import axios from 'axios';
              },
             
           };
-           
+     
            this.data.push( data_payload );
   
         /** 
          * Unsetting all The fields after the data are pushed in the global array
          */
-        this.tableName = "";
+        this.model_fields = "";
         this.form.modelData = "";
         this.form.guarded_fields = "";
         this.form.fillableFields = "";
@@ -557,15 +584,7 @@ import axios from 'axios';
         alert( "Model info added successfully!" );
       },
 
-       addModel(){
-      let models = this.form.modelData;
-      this.xyz = models.split(":");
-      this.tableName = this.xyz[0];
-      this.model = this.xyz[1].split(",");
-    },
-    
       onSubmit () {
-          // this.$router.push('/completion/1');
 
          let config = {
           app_name : this.appName,
@@ -585,7 +604,7 @@ import axios from 'axios';
         };
 
         let id = (this.random = Math.floor(Math.random() * 1000000000) + 1);
-       
+ 
         let self = this;
         axios.post('http://localhost:9000/save/'+id ,formData)
         .then(function(response){
