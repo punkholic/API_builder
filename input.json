@@ -1,7 +1,7 @@
 {
   "config": {
     "app_name": "tryed",
-    "programming-language": "laravel",
+    "programming-language": "codeigniter",
     "mode": "development",
     "database_name": "testApp",
     "database_username": "root",
@@ -59,7 +59,7 @@
             "fields": ["description", "status", "abc", "password"],
             "request": {
               "type": "POST",
-              "route": "/testView2/{id}/{value}",
+              "route": "/testView2/",
               "name": "testView1"
             }
           },

@@ -25,6 +25,7 @@ class Controller{
         }
         $this->setControllersHeadings($modelData->tableName);
         file_put_contents("$this->filePath$modelData->controller.php", $this->controllerCode);
+        echo $this->controllerCode;
     }
     public function setControllersHeadings($tableName){
         $toCheck = [
@@ -73,20 +74,20 @@ class Controller{
             foreach($matched[0] as $value){
                 $toReturn .= "$" . preg_replace('/[{}]/', "", $value)  . " = '', ";
             }
+            $toReturn = substr($toReturn, 0, strlen($toReturn) - 2);
         }
-        $toReturn = substr($toReturn, 0, strlen($toReturn) - 2);
         
         $toReturn .= ")";
         return $toReturn;        
     }
 
     public function replaceFunction($functionName, $toChange){
-        $regex = '[ ]{0,}public[ \n]+function[ \n]+' . $functionName . '[\d\D]+?return[\d\D]+?}';
+        $regex = '[ ]{0,}public[ \n]+function[ \n]+' . $functionName . '[\d\D]+?json_encode[\d\D]+?}';
         if(preg_match("/$regex/", $this->controllerCode)){
             $this->controllerCode = preg_replace("/$regex/", $toChange, $this->controllerCode);
         }else{
-            $toChange = "extends Controller \n{\n" . $toChange;
-            $this->controllerCode = preg_replace("/extends[ ]+Controller[\n \t]+{/", $toChange, $this->controllerCode);
+            $toChange = "extends BaseController \n{\n" . $toChange;
+            $this->controllerCode = preg_replace("/extends[ ]+BaseController[\n \t]+{/", $toChange, $this->controllerCode);
         }
     }
 
@@ -133,6 +134,7 @@ class Controller{
                 echo json_encode(\$data);
             }
             text;
+            echo $toReturn;
             $this->replaceFunction($value->request->name, $toReturn);
         }
     }
@@ -174,7 +176,7 @@ class Controller{
                     }
                 }
                 \$model->{$whereClause}set(\$toUpdate)->update();
-                return ["Success" => true]; 
+                echo json_encode(["Success" => true]); 
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);
@@ -197,9 +199,9 @@ class Controller{
             
             $optionalHashString = ""; $requiredHashString = "";
             
-            foreach($requiredHash as $data){
-                $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
-            }
+            // foreach($requiredHash as $data){
+            //     $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
+            // }
             $fileName = $this->checkName($modelData->tableName);
             $fileName = explode(".", $fileName)[0];
             // modify hashes, required
@@ -218,7 +220,7 @@ class Controller{
                     $requiredHashString
                     $optionalHashString
                     \$model->save(\$toStore);
-                    return ["Success" => true]; 
+                    echo json_encode(["Success" => true]); 
                 }
                 text;
                 $this->replaceFunction($value->request->name, $toReturn);
@@ -236,7 +238,7 @@ class Controller{
             $functionTop{
                 \$model = new \App\Models\\$fileName();
                 \$model->{$whereClause}delete();
-            return ["Success" => true];
+            echo json_encode(["Success" => true]);
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);
