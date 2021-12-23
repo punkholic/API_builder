@@ -58,6 +58,7 @@ class Common{
 
         $data = $data . "PROJECT_PATH=/../../../../release";
         $data = $data . "\nAPP_NAME=" . $jsonInput->config->app_name;
+        $data = $data . "\nAPP_KEY=base64:Kc9Al4IeGJqVABBFCHLg8NG357F3eXI8Qt66Wrbmi04=";
         $data = $data . "\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\n";
         $data = $data . "DB_DATABASE=" . $jsonInput->config->database_name;
         $data = $data . "\nDB_USERNAME=" . $jsonInput->config->database_username;
@@ -86,9 +87,11 @@ class Common{
 
     public static function override_env() {
         $path = __DIR__ . "/../";
-        $gotData = file_get_contents( $path . ".env" );
-        $toOverride = file_get_contents( __DIR__ . PROJECT_PATH . "/.env");
        
+        $gotData = file_get_contents( $path . ".env" );
+       
+        $toOverride = file_get_contents( __DIR__ . PROJECT_PATH . "/.env");
+     
         preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $gotData, $rawGotData);
         preg_match_all( '/([\w\S ]+)=([\w\S ]+){0,}/s' , $toOverride, $rawToOverride);
         
@@ -105,8 +108,6 @@ class Common{
                 if ($count % 4 == 0 ) $toWrite .= "\n\n";
             }
         }
-    //    var_dump($toWrite);
-    //    die();
         file_put_contents( __DIR__ . PROJECT_PATH . "/.env", $toWrite);
       
     }
