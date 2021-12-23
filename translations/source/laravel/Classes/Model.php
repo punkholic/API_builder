@@ -41,7 +41,7 @@ class Model{
         chdir('../release/'); // going to release 
        
  
-        echo shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
+        shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
 
         $fillable = array_merge($modelData->model->fillable, $undefined);
 

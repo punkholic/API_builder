@@ -14,7 +14,7 @@ const routes = [
   { path: '/scratch', component: ScratchPage },
   { path: '/recommend', component: RecommendPage },
   { path: '/dashboard', component: DashboardPage },
-  { path: '/completion/:id', component: BuildProject }
+  { path: '/completion/:id', component: BuildProject },
 ]
 
 export default new VueRouter({mode: 'history', routes})

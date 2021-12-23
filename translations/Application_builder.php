@@ -84,7 +84,7 @@ class Application_builder extends Builder
        
     }
 
-    public function build_project(  ){
+    public function build_project(){
         if (!isset($this->_config['config']))
         {
             throw new Exception('Setting Object Missing', 1);

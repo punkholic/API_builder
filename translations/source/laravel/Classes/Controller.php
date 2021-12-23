@@ -12,7 +12,7 @@ class Controller{
         chdir('../release/');
         foreach($this->jsonInput->data as $data){
             
-            echo shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
+            shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
             $this->processEach($data);
         }
     }
