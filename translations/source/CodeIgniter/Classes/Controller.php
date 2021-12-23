@@ -3,7 +3,7 @@ class Controller{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Http/Controllers/";
+        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
         $this->processModel();
     }
@@ -66,14 +66,16 @@ class Controller{
     public function getFunctionParams($data){
         $functionName = $data->request->name;
         $route = $data->request->route;
-        $toReturn = "public function $functionName(Request \$request";
+        $toReturn = "public function $functionName(";
 
         preg_match_all('/{[\w\d$_]+}/i', $route, $matched);
         if(!empty($matched[0])){
             foreach($matched[0] as $value){
-                $toReturn .= ", $" . preg_replace('/[{}]/', "", $value);
+                $toReturn .= "$" . preg_replace('/[{}]/', "", $value)  . " = '', ";
             }
         }
+        $toReturn = substr($toReturn, 0, strlen($toReturn) - 2);
+        
         $toReturn .= ")";
         return $toReturn;        
     }
@@ -88,32 +90,50 @@ class Controller{
         }
     }
 
-    
+    public function checkName($name){
+        $dirs = scandir("../release/app/Models");
+        foreach($dirs as $dir){
+            if (!in_array($dir, array(".",".."))){
+                $fileNameToCheck = $dir;
+                if (strpos($dir, ".") !== FALSE){
+                    $dir = explode(".", $dir)[0];
+                }
+
+                if(strcasecmp($name, $dir) === 0){
+                    return $fileNameToCheck;
+                }
+            }
+        }
+        return null;
+    }
     public function view($requestData, $fields, $modelData){
         $allFields = array_keys((array)$fields);
+        $fileName = $this->checkName($modelData->tableName);
         
         foreach($requestData as $value){
             $functionTop = $this->getFunctionParams($value);
 
             $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
             $selectData = "*";
-            $validFields = (array_intersect($allFields, $value->fields));
+            $validFields = array_intersect($allFields, $value->fields);
+            
             if(!empty($validFields)){
                 $selectData = "";
                 foreach($validFields as $data){
-                    $selectData .= "'$data', ";
+                    $selectData .= "$data, ";
                 }
                 $selectData = substr($selectData, 0, strlen($selectData) - 2);
             }
 
+            $fileName = explode(".", $fileName)[0];
             $toReturn = <<<text
             $functionTop{
-                \$data =  $modelData->tableName::{$whereClause}select($selectData)->get();
-                return \$data;
+                \$model = new \App\Models\\$fileName;
+                \$data =  \$model->{$whereClause}select("$selectData")->findAll();
+                echo json_encode(\$data);
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);
-
         }
     }
     public function getRouteParam($route){
@@ -125,7 +145,7 @@ class Controller{
         foreach($matched[0] as $params){
             $filteredField = preg_replace('/[{}]/', "", $params);
             $fields[] =  $filteredField;
-            $whereClause .= "where('$filteredField', $$filteredField)->";
+            $whereClause .= "whereIn('$filteredField', $$filteredField)->";
         }
         return ["whereClause" =>$whereClause, "fields" => $fields];
     }
@@ -138,18 +158,22 @@ class Controller{
             $updateFieldString = $this->getArrayString("updateFields", $value->fields, "list");
             $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
             
+            $fileName = $this->checkName($modelData->tableName);
+            $fileName = explode(".", $fileName)[0];
             
             $toReturn = <<<text
             $functionTop
             {
+                \$model = new \App\Models\\$fileName();
+
                 $updateFieldString
                 \$toUpdate = [];
                 foreach(\$updateFields as \$value){
-                    if(\$request->get(\$value) != null){
-                        \$toUpdate[\$value] = \$request->get(\$value);
+                    if(\$this->request->getVar(\$value) != null){
+                        \$toUpdate[\$value] = \$this->request->getVar(\$value);
                     }
                 }
-                $modelData->tableName::{$whereClause}update(\$toUpdate);
+                \$model->{$whereClause}set(\$toUpdate)->update();
                 return ["Success" => true]; 
             }
             text;
@@ -176,23 +200,24 @@ class Controller{
             foreach($requiredHash as $data){
                 $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
             }
-
+            $fileName = $this->checkName($modelData->tableName);
+            $fileName = explode(".", $fileName)[0];
+            // modify hashes, required
             $toReturn = <<<text
                 $functionTop { 
+                    \$model = new \App\Models\\$fileName();
                     $optionalString
                     $requiredString
-                    \$toValidate = [];
                     for(\$i = 0; \$i < count(\$mustHave); \$i++){
-                        \$toValidate[\$mustHave[\$i]] = ['required'];
-                        \$toStore[\$mustHave[\$i]] = \$request->get(\$mustHave[\$i]);
+                        \$toStore[\$mustHave[\$i]] = \$this->request->getVar(\$mustHave[\$i]);
                     }
                     \$toStore = [];
                     for(\$i = 0; \$i < count(\$optionalField); \$i++){
-                        \$toStore[\$optionalField[\$i]] = \$request->get(\$optionalField[\$i]);
+                        \$toStore[\$optionalField[\$i]] = \$this->request->getVar(\$optionalField[\$i]);
                     }
                     $requiredHashString
                     $optionalHashString
-                    $modelData->tableName::insert(\$toStore);
+                    \$model->save(\$toStore);
                     return ["Success" => true]; 
                 }
                 text;
@@ -205,10 +230,13 @@ class Controller{
             $functionTop = $this->getFunctionParams($value);
 
             $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+            $fileName = $this->checkName($modelData->tableName);
+            $fileName = explode(".", $fileName)[0];
             $toReturn = <<<text
             $functionTop{
-                $modelData->tableName::{$whereClause}delete();
-                return ["Success" => true];
+                \$model = new \App\Models\\$fileName();
+                \$model->{$whereClause}delete();
+            return ["Success" => true];
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);
