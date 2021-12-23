@@ -20,7 +20,7 @@ class Main{
         // $this->makeAuth();
     
         Common::override_env();  
-
+      
         $this->model = new Model( $this->jsonInput );
         $this->route = new Route( $this->jsonInput );
         $this->controller = new Controller( $this->jsonInput );
