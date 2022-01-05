@@ -32,17 +32,78 @@ require 'vendor/autoload.php';
         $json = file_get_contents('php://input', TRUE);
      
         $payload_data = json_decode($json, true);
-       
-        foreach( $payload_data['config'] as $key => $value ){
-         
-            if( $key == 'programming_langauge') {
-                // unset($payload_data['config'][$key]);
-                $key = "programming-language";
-                $payload_data['config'][$key] = $value;
 
+        foreach( $payload_data['config'] as $key => $value ){
+            $remove_whitespace = explode( " ", $value );
+            is_array( $remove_whitespace ) ? ( $new_value = implode("_",$remove_whitespace) ) : $new_value = $value;
+                   
+            switch ( $key ) {
+                case 'programming_langauge' : 
+                    $key = "programming-language";
+                    $payload_data['config'][$key] = $value;
+                break;
+                case 'app_name' : 
+                case 'database_name' : 
+                case 'database_username' : 
+                    $payload_data['config'][$key] = $new_value;
+                break;
             }
-        }   
-       
+        }  
+        $whitelisted_data_payload = [];
+        foreach( $payload_data['data'] as $data_key => $data_value ){
+            
+            $name_wspace = explode( " ", $data_value['tableName'] );
+            is_array( $name_wspace ) ? ( $data_value['tableName'] = implode( "_", $name_wspace) ) : $data_value['tableName'] = $data_value['tableName'];
+            
+            $controller_name_wspace = explode( " ", $data_value['controller'] );
+            is_array( $controller_name_wspace ) ? ( $data_value['controller'] = implode( "_", $controller_name_wspace) ) : $data_value['controller'] = $data_value['controller'];
+            
+            $model = $data_value['model'];
+            if( $model ) {
+                foreach( $model as $model_key => $model_value ) {
+                    if( is_array( $model_value ) ) {
+                        foreach( $model_value as $m_key => $m_val ) {
+                           
+                            if( ! is_array( $m_val ) ) {
+                                $value_w_space = explode( " ", $m_val );
+                                is_array( $value_w_space ) ? ( $m_val = implode( "_", $value_w_space) ) : $m_val = $m_val ;
+                                if( ! is_numeric( $m_key ) ) {
+                                    $remove_key_w_space = explode( " ", $m_key );
+                                    if( is_array( $remove_key_w_space ) ) { 
+                                        $model_value[implode( "_", $remove_key_w_space)] = $m_val ;
+                                        unset($model_value[$m_key]);
+                                    }
+                                } else if ( is_numeric( $m_key ) ) {
+                                    $model_value[$m_key] = $m_val;
+                                }  
+                            } else if ( is_array( $m_val ) ) {
+                                foreach( $m_val as $k => $v ) {
+                                    if( is_array( $v ) ) {
+                                        foreach ( $v as $f_k => $f_v ) {
+                                            $final_replacement = explode( " ", $f_v );
+                                            is_array( $final_replacement ) ? ( $v[$f_k] = implode( "_", $final_replacement) ) : $v[$f_k] = $f_v ;
+                                
+                                        }
+                                    }
+                                 
+                                    $m_val[$k] = $v;
+                                }
+                                $model_value[$m_key] =  $m_val;
+
+                            }
+
+                        }
+
+                    }
+                    $model[$model_key] = $model_value;
+                }
+                $data_value['model'] = $model;
+            }  
+            $whitelisted_data_payload[] = $data_value;
+        } 
+        $payload_data['data'] = $whitelisted_data_payload;  
+      
+    
         chdir( "../");
         $root_dir = getcwd();
         
@@ -161,8 +222,8 @@ require 'vendor/autoload.php';
         chdir("../translations");
         
         include_once(getcwd() . "/Application_builder.php");
-        
-        $app = new Application_builder($json_data);
+       
+        $app = new Application_builder( $json_data );
     
         $zip_link = $app->build();
       
@@ -205,11 +266,7 @@ require 'vendor/autoload.php';
 
         chdir("../PastProjects/".$file_folder_name );
         $projects_dir = getcwd();
-        // echo $projects_dir; 
-        // die();
-        // return redirect($zip_path);
-    //    var_dump($zip_path);
-    //    die();
+    
         header('Content-Type: application/zip');
         header("Content-Type: application/force-download");
         header('Content-Disposition: attachment; filename="xx.zip"');

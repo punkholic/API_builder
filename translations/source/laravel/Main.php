@@ -12,9 +12,11 @@ class Main{
         
         $_SESSION['global_counter'] = 0;
 
-        $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
+        // $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
+        $this->jsonInput = json_decode( $jsonFile );
+        // $this->jsonInput = $jsonFile;
         $this->jsonInput = Common::validate_timestamp( $this->jsonInput );
-        
+     
         Common::processEnv( $this->jsonInput );
 
         // $this->makeAuth();
@@ -61,7 +63,7 @@ class Main{
         echo shell_exec( 'chmod 764 ' . $project_path );
     }
 }
-$json_dir = __DIR__ . "/../../../input.json";
+// $json_dir = __DIR__ . "/../../../input.json";
 
-$main = new Main($json_dir);
+// $main = new Main($json_dir);
 ?>

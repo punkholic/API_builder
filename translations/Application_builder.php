@@ -59,8 +59,11 @@ class Application_builder extends Builder
      */
     public function build()
     {
+        // $payload_data = $this->_config;
+        
+   
         $this->init();
-       
+        
         foreach ($this->_render_list as $builder_name => $builder)
         {
             
@@ -121,6 +124,7 @@ class Application_builder extends Builder
         }
         
         include_once __DIR__ . "/source/CodeIgniter/Main.php";
+        // $main = new Main();
         /**
          * call the function that creates the laravel project and download the release
          * Code below
@@ -137,19 +141,23 @@ class Application_builder extends Builder
         {
             throw new Exception("Initialize PHP not set");
         }
-        
+       
         include_once __DIR__ . "/source/laravel/Main.php" ;
         /**
          * call the function that creates the laravel project and download the release
          * Code below
          *  */ 
-        $zip_builder = new Zip_builder( $this->_config);
+        $main = new Main( json_encode($this->_config) );
+   
+
+        $zip_builder = new Zip_builder( $this->_config );
 
         $zip_file_name = $zip_builder->create_zip_archieve();
         return $zip_file_name;
         
         
     }
+
     /**
      * Destroy Function
      *

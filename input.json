@@ -1,163 +1,96 @@
 {
   "config": {
-    "app_name": "tryed",
-    "programming-language": "laravel",
-    "mode": "development",
-    "database_name": "testApp",
-    "database_username": "root",
-    "database_password": ""
+      "app_name": "Nihil_cupidatat_volu",
+      "programming_langauge": "laravel",
+      "mode": "development",
+      "database_name": "Est_fugiat_exceptur",
+      "database_username": "Quia_quidem_ducimus",
+      "database_password": "",
+      "programming-language": "laravel"
   },
   "data": [
-    {
-      "tableName": "blog",
-      "controller": "BlogController",
-      "model": {
-        "fields": {
-          "id": "primary",
-          "title": "string|required",
-          "description": "text|required",
-          "password": "hash|required",
-          "status": "enum|required",
-          "abc": "string"
-        },
-        "guarded": ["id", "password"],
-        "fillable": ["title", "description", "status", "abc"],
-        "mapping": [
-          {
-            "status": {
-              "0": "InActive",
-              "1": "Active"
-            }
-          },
-          {
-            "description": {
-              "xyz": "xyz",
-              "abc": "abc"
-            }
-          },
-          {
-            "abc": {
-              "456": "123",
-              "abc": "55"
-            }
+      {
+          "tableName": "user",
+          "controller": "userController",
+          "model": {
+              "fields": {
+                  "i_d": "integer"
+              },
+              "guarded": [
+                  "id",
+                  "name",
+                  "age",
+                  "se_x"
+              ],
+              "fillable": [
+                  "id",
+                  "n_ame",
+                  "a_ge",
+                  "s ex"
+              ],
+              "mapping": [],
+              "timestamps": true,
+              "view": [
+                  {
+                      "fields": [
+                          "id ",
+                          "n ame",
+                          "ag e",
+                          "s ex"
+                      ],
+                      "request": {
+                          "type": "GE T",
+                          "route": "\/v",
+                          "name": "view"
+                      }
+                  }
+              ],
+              "add": [
+                  {
+                      "fields": [
+                          "i d",
+                          "na me",
+                          "age",
+                          "sex"
+                      ],
+                      "request": {
+                          "type": "POST",
+                          "route": "\/a",
+                          "name": "a dd"
+                      }
+                  }
+              ],
+              "edit": [
+                  {
+                      "fields": [
+                          "id",
+                          "n ame",
+                          "ag e",
+                          "s ex"
+                      ],
+                      "request": {
+                          "type": "PUT",
+                          "route": "\/e\/{id}",
+                          "name": "ed it"
+                      }
+                  }
+              ],
+              "delete": [
+                  {
+                      "fields": [
+                          "id",
+                          "n ame",
+                          "ag e",
+                          "sex"
+                      ],
+                      "request": {
+                          "type": "DELETE",
+                          "route": "\/d\/{id}",
+                          "name": "del ete"
+                      }
+                  }
+              ]
           }
-        ],
-        "timestamps": true,
-        "view": [
-          {
-            "fields": ["description", "status"],
-            "request": {
-              "type": "GET",
-              "route": "/testView",
-              "condition": [],
-              "name": "moreView"
-            }
-          }
-        ],
-        "add": [
-          {
-            "fields": ["description", "status", "abc", "password"],
-            "request": {
-              "type": "POST",
-              "route": "/testView2/{id}/{value}",
-              "name": "testView1"
-            }
-          },
-          {
-            "fields": ["description", "status"],
-            "request": {
-              "type": "GET",
-              "route": "/testView5",
-              "name": "testView2"
-            }
-          }
-        ],
-        "edit": [
-          {
-            "fields": ["description", "status"],
-            "request": {
-              "type": "POST",
-              "route": "/testView3/{id}/{value}",
-              "name": "testView3"
-            }
-          }
-        ],
-        "delete": [
-          {
-            "fields": ["description", "status"],
-            "request": {
-              "type": "POST",
-              "route": "/testView4",
-              "name": "testView4"
-            }
-          }
-        ]
       }
-    },
-    {
-      "tableName": "more",
-      "controller": "MoreController",
-      "model": {
-        "fields": {
-          "id": "primary",
-          "name": "text",
-          "age": "integer",
-          "price": "decimal",
-          "password": "hash"
-        },
-        "guarded": ["id", "password"],
-        "fillable": ["name", "age", "price"],
-        "mapping": [],
-        "timestamps": true,
-        "view": [
-          {
-            "fields": ["name", "age", "price"],
-            "request": {
-              "type": "GET",
-              "route": "/getMore",
-              "name": "moreView1"
-            }
-          }
-        ],
-        "add": [
-          {
-            "fields": ["name", "age", "price"],
-            "request": {
-              "type": "POST",
-              "route": "/storeMore",
-              "name": "moreView2"
-            }
-          },
-          {
-            "fields": ["name", "age", "price"],
-            "request": {
-              "type": "POST",
-              "route": "/moreView5",
-              "name": "store"
-            }
-          }
-        ],
-        "edit": [
-          {
-            "fields": ["name", "age", "price"],
-            "request": {
-              "type": "POST",
-              "route": "/editMore/{id}",
-              "name": "moreView4"
-            }
-          }
-        ],
-        "delete": [
-          {
-            "fields": ["name", "age", "price"],
-            "request": {
-              "type": "DELETE",
-              "route": "/deleteMore/{id}",
-              "name": "moreView5"
-            }
-          }
-        ]
-      }
-    }
   ]
 }

@@ -319,7 +319,6 @@
                     required
                   >
                       <option value="PUT" selected >PUT</option>
-                    <option value="POST">POST</option>
                     <option value="PATCH">PATCH</option>
                   </select>
                 </div>
@@ -529,6 +528,15 @@ import axios from 'axios';
                 "name": view_request_name
               }
             };
+            let view_arr = [];
+            let add_arr = [];
+            let edit_arr = [];
+            let delete_arr = [];
+            view_arr.push(view_payload);
+            add_arr.push(add_payload);
+            edit_arr.push(edit_payload);
+            delete_arr.push(delete_payload);
+
             let model_fields = this.form.model_fields;
             let ind_model_fields = model_fields.split(":");
             // key : value
@@ -540,7 +548,8 @@ import axios from 'axios';
                 this.$set(temp_arr, final[0],final[1]);
                
             });
-           let fields_p_load =  Object.assign({}, temp_arr);
+
+          let fields_p_load =  Object.assign({}, temp_arr);
            
            let data_payload = {
              tableName: tableName,
@@ -551,10 +560,10 @@ import axios from 'axios';
                fillable: fillable_field_needed,
                mapping: [],
                timestamps: timestamp,
-               view: view_payload,
-               add: add_payload,
-               edit: edit_payload,
-               delete: delete_payload
+               view: view_arr,
+               add: add_arr,
+               edit: edit_arr,
+               delete: delete_arr
              },
             
           };

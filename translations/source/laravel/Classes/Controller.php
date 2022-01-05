@@ -168,14 +168,18 @@ class Controller{
             $optionalString = $this->getArrayString("optionalField", $optionalFields, "list");
             $requiredString = $this->getArrayString("mustHave", $requiredFields, "list");
             
-            $optionalHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['optional']);
-            $requiredHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['required']);
+            $optionalHashString = ""; 
+            $requiredHashString = "";
             
-            $optionalHashString = ""; $requiredHashString = "";
-            
-            foreach($requiredHash as $data){
-                $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
+            if ( array_keys($fieldsInfo, 'hash') ) {
+                $optionalHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['optional']);
+                $requiredHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['required']);
+                
+                foreach($requiredHash as $data){
+                    $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
+                }
             }
+           
 
             $toReturn = <<<text
                 $functionTop { 
