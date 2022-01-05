@@ -1,0 +1,29 @@
+{
+    "config": {
+      "app_name": "tryed",
+      "programming_language": "laravel"
+    },
+    "data": [
+      {
+        "tableName": "blog",
+        "db_fields" : [
+            "id",
+            "name",
+            "title",
+            "description",
+            "seo_title"
+        ]
+      },
+      {
+        "tableName": "user",
+        "db_fields" : [
+            "id",
+            "name",
+            "age",
+            "sex",
+            "password"
+        ]
+      }
+    ]
+  }
+  

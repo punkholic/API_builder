@@ -108,7 +108,7 @@ class Controller{
 
             $toReturn = <<<text
             $functionTop{
-                \$data =  $modelData->tableName::{$whereClause}select($selectData)->get();
+                \$data =  $modelData->tableName::{$whereClause}select('$selectData')->get();
                 return \$data;
             }
             text;

@@ -292,6 +292,111 @@ require 'vendor/autoload.php';
         exit;
     }, 'POST');
 
+    Flight::route('/recommend', function () {
+        
+        if (isset( $_SERVER['HTTP_ORIGIN'] )) {
+            header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');    // cache for 1 day
+        }
+    
+        // Access-Control headers are received during OPTIONS requests
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+                header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+    
+            if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    
+            exit(0);
+        }
+        
+        $json = file_get_contents('php://input', TRUE);
+     
+        $payload_data = json_decode($json, true);
+
+        //For testing using backend
+        
+        // $recommend_sample_path = __DIR__ . "../recommendation.json";
+
+        // $payload_data = json_decode(file_get_contents($recommend_sample_path));
+       
+        chdir( "../");
+               
+        chdir("uploads");
+        $uploads_root = getcwd();
+               
+        $language = $payload_data['config']['programming_language'];
+        
+        $uc_lang = ucfirst( $language );
+       
+        $path = $uploads_root ."/" . $uc_lang;
+        $files_list = scandir($path);
+        // looping through the directory files usually the 1st 2 index will be . and ..
+        // so we loop from 3rd index always
+        $whitelisted_json = [];
+        for( $i = 2; $i < count( $files_list ); $i++ ) {
+            $json_we_have = file_get_contents($path . "/" . $files_list[$i] );
+            $data = (array)json_decode($json_we_have);
+            $points_count = 0;
+            // Code to matchcase the values 1st from the configuration
+           
+            similar_text($data['config']->app_name, $payload_data['config']['app_name'], $match_percent );
+                  
+            if( $match_percent > 50 ){
+                $points_count += 1;
+            }
+            /**
+             * making more tests here and adding the points to the json
+             * Now willl be comparing the fields and see what point the json will get 
+             */
+            $old_data_array = (array)$data['data'];
+           
+            foreach( $payload_data['data'] as $to_comp_key ) {
+                foreach( $old_data_array as $arr ) {
+                    $arr = (array)$arr;
+                 
+                    similar_text( $to_comp_key['tableName'], $arr['tableName'], $table_match_percent );
+                   
+                    if( $table_match_percent > 50 ){
+                        $avg_points = 0;
+                        $old_data_model = $arr['model'];
+                        $old_fields = $old_data_model->fields;
+                        if( $old_fields ) {
+                            foreach( $old_fields as $key => $value ) {
+                                for( $j = 0; $j < count($to_comp_key['db_fields']) ; $j++  ) {
+                                    similar_text( $to_comp_key['db_fields'][$j], $key , $field_match_percent ); 
+                                    if( $field_match_percent > 70 ) {
+                                        $avg_points += 1;
+                                    }
+                                }
+                            }
+                        }
+                        $points_count += $avg_points / count($to_comp_key['db_fields']) ;
+                    }
+                }
+              
+            }
+           if( $points_count > 3 ) {
+                $points_count = round( $points_count );
+                $whitelisted_json[$points_count] = $files_list[$i];
+           }
+        }
+
+        var_dump($whitelisted_json);
+        die();
+        /**
+         * Firstly fix the bug with the fields value not comming from UI.
+         * TODO : IF whitelist json array have more then 1 json files 
+         * apply any algorithm to find the best using the points count as calculation then pass the json to
+         *  Application builder then build and return the project to the UI from where user can download it.
+         *  */ 
+        
+        http_response_code(200);
+        exit;
+    }, 'POST');
+
 Flight::start();
 
 
