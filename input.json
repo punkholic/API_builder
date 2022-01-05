@@ -1,96 +1,96 @@
 {
-  "config": {
-      "app_name": "Nihil_cupidatat_volu",
-      "programming_langauge": "laravel",
-      "mode": "development",
-      "database_name": "Est_fugiat_exceptur",
-      "database_username": "Quia_quidem_ducimus",
-      "database_password": "",
-      "programming-language": "laravel"
-  },
-  "data": [
-      {
-          "tableName": "user",
-          "controller": "userController",
-          "model": {
-              "fields": {
-                  "i_d": "integer"
-              },
-              "guarded": [
-                  "id",
-                  "name",
-                  "age",
-                  "se_x"
-              ],
-              "fillable": [
-                  "id",
-                  "n_ame",
-                  "a_ge",
-                  "s ex"
-              ],
-              "mapping": [],
-              "timestamps": true,
-              "view": [
-                  {
-                      "fields": [
-                          "id ",
-                          "n ame",
-                          "ag e",
-                          "s ex"
-                      ],
-                      "request": {
-                          "type": "GE T",
-                          "route": "\/v",
-                          "name": "view"
-                      }
-                  }
-              ],
-              "add": [
-                  {
-                      "fields": [
-                          "i d",
-                          "na me",
-                          "age",
-                          "sex"
-                      ],
-                      "request": {
-                          "type": "POST",
-                          "route": "\/a",
-                          "name": "a dd"
-                      }
-                  }
-              ],
-              "edit": [
-                  {
-                      "fields": [
-                          "id",
-                          "n ame",
-                          "ag e",
-                          "s ex"
-                      ],
-                      "request": {
-                          "type": "PUT",
-                          "route": "\/e\/{id}",
-                          "name": "ed it"
-                      }
-                  }
-              ],
-              "delete": [
-                  {
-                      "fields": [
-                          "id",
-                          "n ame",
-                          "ag e",
-                          "sex"
-                      ],
-                      "request": {
-                          "type": "DELETE",
-                          "route": "\/d\/{id}",
-                          "name": "del ete"
-                      }
-                  }
-              ]
-          }
-      }
-  ]
-}
+    "config": {
+        "app_name": "Nihil_cupidatat_volu",
+        "programming_langauge": "laravel",
+        "mode": "development",
+        "database_name": "Est_fugiat_exceptur",
+        "database_username": "Quia_quidem_ducimus",
+        "database_password": "",
+        "programming-language": "laravel"
+    },
+    "data": [
+        {
+            "tableName": "user",
+            "controller": "userController",
+            "model": {
+                "fields": {
+                    "i_d": "integer"
+                },
+                "guarded": [
+                    "id",
+                    "name",
+                    "age",
+                    "se_x"
+                ],
+                "fillable": [
+                    "id",
+                    "n_ame",
+                    "a_ge",
+                    "sex"
+                ],
+                "mapping": [],
+                "timestamps": true,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "n ame",
+                            "age",
+                            "sex"
+                        ],
+                        "request": {
+                            "type": "GE T",
+                            "route": "\/v",
+                            "name": "view"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "id",
+                            "na me",
+                            "age",
+                            "sex"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "\/a",
+                            "name": "a dd"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "id",
+                            "n ame",
+                            "ag e",
+                            "s ex"
+                        ],
+                        "request": {
+                            "type": "PUT",
+                            "route": "\/e\/{id}",
+                            "name": "ed it"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [
+                            "id",
+                            "n ame",
+                            "age",
+                            "sex"
+                        ],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "\/d\/{id}",
+                            "name": "del ete"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+  }
