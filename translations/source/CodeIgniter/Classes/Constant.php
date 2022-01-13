@@ -7,7 +7,7 @@ abstract class Constant {
     const COMMANDS = [
         "CREATE_PROJECT" => "composer create-project --prefer-dist laravel/laravel ",
         "MAKE_AUTH" => "composer require laravel/ui && php artisan ui:auth && php artisan ui:auth --views",
-        "MAKE_MIGRATION" => "php artisan make:migration create_PLACEHOLDER1_table --table=PLACEHOLDER2",
+        "MAKE_MIGRATION" => "php spark make:migration PLACEHOLDER1 --table=PLACEHOLDER2",
         "MIGRATE_FRESH" => "php artisan migrate:fresh",
         "MAKE_MODEL" => "php spark make:model ",
         "MAKE_CONTROLLER" => "php spark make:controller ",

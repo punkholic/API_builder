@@ -77,7 +77,7 @@ class Model{
                     "table" => $modelData->tableName,
                     "primaryKey" => $primary,
                     "useSoftDeletes" => "true",
-                    "useTimestamps" => $modelData->model->timestamps == 1 ? "true" : "false",
+                    "useTimestamps" => "false",
                     "allowedFields" => $fillable,
         ];
 

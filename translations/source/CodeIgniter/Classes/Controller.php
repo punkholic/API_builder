@@ -25,7 +25,6 @@ class Controller{
         }
         $this->setControllersHeadings($modelData->tableName);
         file_put_contents("$this->filePath$modelData->controller.php", $this->controllerCode);
-        echo $this->controllerCode;
     }
     public function setControllersHeadings($tableName){
         $toCheck = [
@@ -134,7 +133,6 @@ class Controller{
                 echo json_encode(\$data);
             }
             text;
-            echo $toReturn;
             $this->replaceFunction($value->request->name, $toReturn);
         }
     }
@@ -176,7 +174,7 @@ class Controller{
                     }
                 }
                 \$model->{$whereClause}set(\$toUpdate)->update();
-                echo json_encode(["Success" => true]); 
+                echo json_encode(["Success" => true]);
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);

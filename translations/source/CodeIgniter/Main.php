@@ -3,16 +3,18 @@ include __DIR__ . "/Classes/Route.php";
 include __DIR__."/Classes/Constant.php";
 include __DIR__."/Classes/Model.php";
 include __DIR__."/Classes/Controller.php";
+include __DIR__."/Classes/Migration.php";
+include __DIR__."/includes/Common.php";
 
 class Main{
     public function __construct( $jsonFile ){
         define("PROJECT_PATH", "/../../../../release");
         $this->jsonInput = json_decode( file_get_contents( $jsonFile ) );
+        $this->migration = new Migration( $this->jsonInput );
         $this->route = new Route( $this->jsonInput );
         $this->model = new Model( $this->jsonInput );
         $this->controller = new Controller( $this->jsonInput );
     }
-
 }
 
 $json_dir = __DIR__ . "/../../../input.json";
