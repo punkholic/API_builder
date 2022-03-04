@@ -4,11 +4,11 @@ class Migration{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Database/Migrations/";
+        $this->filePath = PROJECT_PATH . "/app/Database/Migrations/";
         $this->changeDatabase();
         $this->migrations = $this->getFileList();
         $this->processModel();
-        chdir('../release/');
+        chdir(PROJECT_PATH);
         // echo shell_exec( Constant::COMMANDS['MIGRATE_FRESH'] );
     }
     
@@ -45,10 +45,8 @@ class Migration{
         $tableName = strtolower( $modelData->tableName );
         $phaseOne = str_replace("PLACEHOLDER1", $tableName, Constant::COMMANDS['MAKE_MIGRATION']);
         $secondPhase = str_replace("PLACEHOLDER2", $modelData->tableName, $phaseOne);
-
-        chdir('../release/');
-
-        shell_exec($secondPhase);
+        chdir(PROJECT_PATH);
+        echo shell_exec($secondPhase);
 
         //generate code for recently created file
         $this->insertField( $tableName, $this->processFields( $modelData->model->fields, $tableName, $modelData->model->timestamps ) );

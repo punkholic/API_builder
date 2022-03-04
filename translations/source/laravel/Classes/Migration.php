@@ -4,10 +4,10 @@ class Migration{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/database/migrations/";
+        $this->filePath = PROJECT_PATH . "/database/migrations/";
         $this->migrations = $this->getFileList();
         $this->processModel();
-        chdir('../release/'); 
+        chdir(PROJECT_PATH); 
         // echo shell_exec( Constant::COMMANDS['MIGRATE_FRESH'] );
     }
     
@@ -100,7 +100,7 @@ class Migration{
             }
             $gotValues .= ";\n";
         }
-
+        //change here
         $toReturn = "Schema::create('$tableName', ";
         $toReturn .= Common::renderFunction([
             "text" => $gotValues,

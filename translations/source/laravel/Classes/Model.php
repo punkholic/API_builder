@@ -6,7 +6,7 @@ class Model{
     public function __construct($input){
         $this->jsonInput = $input;
        
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Models/";
+        $this->filePath = PROJECT_PATH . "/app/Models/";
         $this->processModel();
     }
 
@@ -37,8 +37,7 @@ class Model{
         
 
         //creating model
-        // echo getcwd(); // For getting the current directory
-        chdir('../release/'); // going to release 
+        chdir(PROJECT_PATH); // going to release 
        
  
         shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");

@@ -3,13 +3,13 @@ class Controller{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Controllers/";
+        $this->filePath =  PROJECT_PATH . "/app/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
         $this->processModel();
     }
     
     public function processModel(){
-        chdir('../release/');
+        chdir(PROJECT_PATH);
         foreach($this->jsonInput->data as $data){
             
             echo shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
@@ -91,7 +91,7 @@ class Controller{
     }
 
     public function checkName($name){
-        $dirs = scandir("../release/app/Models");
+        $dirs = scandir(PROJECT_PATH . "/app/Models");
         foreach($dirs as $dir){
             if (!in_array($dir, array(".",".."))){
                 $fileNameToCheck = $dir;

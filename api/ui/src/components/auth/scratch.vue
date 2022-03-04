@@ -79,6 +79,7 @@
                       v-model="form.model_fields"
                       name="model_fields"
                       id="model_fields"
+                      value="user:id..integer,name..string|required,age..integer|required,sex..enum|required"
                     />
                     <p>
                       <small
@@ -133,11 +134,11 @@
             <label for="id" class="col-sm-4 control-label">{{ m }}</label>
             <div>
               <select v-model="selected[m]" class="form-control">
-                <option value="primary" >primary</option>
                 <option value="string">String</option>
                 <option value="integer">Integer</option>
                 <option value="text">Text</option>
                 <option value="hash">Hash</option>
+                <option value="primary" >primary</option>
                 <option value="enum">Enum</option>
                 <option value="date">Date</option>
                 <option value="decimal">Decimal</option>
@@ -165,6 +166,7 @@
               v-model="form.fillableFields"
               name="fillableFields"
               id="fillableFields"
+              value="id,name,age,sex"
             />
              <p>
               <small
@@ -181,6 +183,7 @@
               v-model="form.guarded_fields"
               name="guarded_fields"
               id="guarded_fields"
+              value="name,age,sex"
             />
              <p>
               <small
@@ -201,6 +204,7 @@
                       v-model="form.view_fields"
                       name="view_fields"
                       id="view_fields"
+                      value="id,name,price,quantity"
                     />
                     <p>
                       <small
@@ -218,6 +222,7 @@
                       v-model="form.view_request_route"
                       name="view_request_route"
                       id="view_request_route"
+                      value="/testView2/{id}"
                     />
                     <p>
                       <small
@@ -432,13 +437,29 @@ import axios from 'axios';
   export default {
     data () {
       return {
-              appName:'',
-              programmingLanguage:'',
+              appName:'hello',
+              programmingLanguage:'laravel',
               editRequest: '',
-              databaseName:'',
-              databaseUsername:'',
-              databasePassword:'',
-              form:{},
+              databaseName:'test',
+              databaseUsername:'root',
+              databasePassword:'root',
+              form:{
+                model_fields:"user:id..integer,name..string|required,age..integer|required,sex..enum|required",
+                fillableFields: "id,name,age,sex",
+                guarded_fields: "name,age,sex",
+                view_fields: "name,age,sex",
+                view_request_name: 'a',
+                view_request_route: "/id/{a}",
+                add_fields: "a",
+                add_request_route: "a",
+                add_request_name: "a",
+                edit_fields: "a",
+                edit_request_route: "a",
+                edit_request_name: "a",
+                delete_fields: "a",
+                delete_request_route: "a",
+                delete_request_name: "a",
+              },
               model: {},
               // selected: [],
               checkedNames:[],
@@ -615,6 +636,7 @@ import axios from 'axios';
         let id = (this.random = Math.floor(Math.random() * 1000000000) + 1);
  
         let self = this;
+        
         axios.post('http://localhost:9000/save/'+id ,formData)
         .then(function(response){
           self.$router.push('/completion/' + id );

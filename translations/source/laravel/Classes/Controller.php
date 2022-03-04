@@ -3,13 +3,13 @@ class Controller{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Http/Controllers/";
+        $this->filePath = PROJECT_PATH . "/app/Http/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
         $this->processModel();
     }
     
     public function processModel(){
-        chdir('../release/');
+        chdir(PROJECT_PATH);
         foreach($this->jsonInput->data as $data){
             
             shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
@@ -108,7 +108,7 @@ class Controller{
 
             $toReturn = <<<text
             $functionTop{
-                \$data =  $modelData->tableName::{$whereClause}select('$selectData')->get();
+                \$data =  $modelData->tableName::{$whereClause}select($selectData)->get();
                 return \$data;
             }
             text;
@@ -186,11 +186,11 @@ class Controller{
                     $optionalString
                     $requiredString
                     \$toValidate = [];
+                    \$toStore = [];
                     for(\$i = 0; \$i < count(\$mustHave); \$i++){
                         \$toValidate[\$mustHave[\$i]] = ['required'];
                         \$toStore[\$mustHave[\$i]] = \$request->get(\$mustHave[\$i]);
                     }
-                    \$toStore = [];
                     for(\$i = 0; \$i < count(\$optionalField); \$i++){
                         \$toStore[\$optionalField[\$i]] = \$request->get(\$optionalField[\$i]);
                     }
