@@ -39,7 +39,7 @@ import axios from 'axios';
  
       buildProject() {
         let self = this;
-        axios.post('http://localhost:9000/build_project/' + this.$route.params.id ,this.jsonData)
+        axios.post('http://localhost:9000/build_project/' + this.$route.params.id, this.jsonData)
         .then(function(response){
             self.zip_path = response.data.zip_link;
             let d_btn = document.getElementById("download_btn");
@@ -57,7 +57,7 @@ import axios from 'axios';
       },
 
       downloadProject () {
-          window.location.href = this.zip_path;
+        window.location.href = require(`../../../../../PastProjects/${this.zip_path}`)
       }
 
     }
