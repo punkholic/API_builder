@@ -32,7 +32,7 @@ require 'vendor/autoload.php';
         $json = file_get_contents('php://input', TRUE);
      
         $payload_data = json_decode($json, true);
-        
+
         foreach( $payload_data['config'] as $key => $value ){
             $remove_whitespace = explode( " ", $value );
             is_array( $remove_whitespace ) ? ( $new_value = implode("_",$remove_whitespace) ) : $new_value = $value;
@@ -67,7 +67,7 @@ require 'vendor/autoload.php';
                             if( ! is_array( $m_val ) ) {
                                 $value_w_space = explode( " ", $m_val );
                                 is_array( $value_w_space ) ? ( $m_val = implode( "_", $value_w_space) ) : $m_val = $m_val ;
-                                if( ! is_numeric( $m_key ) ) {
+                                if( ! is_numeric( $m_key ) && strpos($m_key, " ") !== false ) {
                                     $remove_key_w_space = explode( " ", $m_key );
                                     if( is_array( $remove_key_w_space ) ) { 
                                         $model_value[implode( "_", $remove_key_w_space)] = $m_val ;
@@ -103,7 +103,7 @@ require 'vendor/autoload.php';
         } 
         $payload_data['data'] = $whitelisted_data_payload;  
 
-    
+
         chdir( "../");
         $root_dir = getcwd();
         

@@ -11,7 +11,6 @@ class Controller{
     public function processModel(){
         chdir(PROJECT_PATH);
         foreach($this->jsonInput->data as $data){
-            
             shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
             $this->processEach($data);
         }

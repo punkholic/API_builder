@@ -10,10 +10,15 @@
   },
   "data": [
       {
-          "tableName": "user",
-          "controller": "UserController",
+          "tableName": "users",
+          "controller": "UsersController",
           "model": {
-              "fields": [],
+            "fields": {
+                "id": "primary",
+                "name": "string|required",
+                "age": "text|required",
+                "sex": "text|required"
+              },
               "guarded": [
                   "name",
                   "age",
@@ -58,7 +63,7 @@
                           "a"
                       ],
                       "request": {
-                          "type": "",
+                          "type": "POST",
                           "route": "a",
                           "name": "a"
                       }
