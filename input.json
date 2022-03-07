@@ -17,7 +17,7 @@
             "title": "string|required",
             "description": "text|required",
             "password": "hash|required",
-            "status": "enum|required",
+            "status": "enum",
             "abc": "string"
           },
           "guarded": ["id", "password"],
@@ -56,10 +56,10 @@
           ],
           "add": [
             {
-              "fields": ["description", "status", "abc", "password"],
+              "fields": ["description", "title", "password"],
               "request": {
                 "type": "POST",
-                "route": "/testView2/{id}/{value}",
+                "route": "/testView2/",
                 "name": "testView1"
               }
             },
@@ -77,7 +77,7 @@
               "fields": ["description", "status"],
               "request": {
                 "type": "POST",
-                "route": "/testView3/{id}/{value}",
+                "route": "/testView3/{id}",
                 "name": "testView3"
               }
             }
@@ -87,7 +87,7 @@
               "fields": ["description", "status"],
               "request": {
                 "type": "POST",
-                "route": "/testView4",
+                "route": "/testView4/{id}",
                 "name": "testView4"
               }
             }
@@ -108,7 +108,7 @@
           "guarded": ["id", "password"],
           "fillable": ["name", "age", "price"],
           "mapping": [],
-          "timestamps": true,
+          "timestamps": false,
           "view": [
             {
               "fields": ["name", "age", "price"],

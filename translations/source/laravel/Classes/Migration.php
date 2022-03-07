@@ -49,7 +49,7 @@ class Migration{
         shell_exec($secondPhase);
 
         //generate code for recently created file
-        $this->insertField( $tableName, $this->processFields( $modelData->model->fields, $tableName ) );
+        $this->insertField( $tableName, $this->processFields( $modelData->model->fields, $tableName, $modelData->model->timestamps ) );
     }
 
     private function insertField($tableName, $toWrite){
@@ -67,7 +67,7 @@ class Migration{
         file_put_contents($fileName, $finalPhase);
 
     }
-    private function processFields($fields, $tableName){
+    private function processFields($fields, $tableName, $timestamps){
         $typeChange = [
             "primary" => "increments('PASSED_DATA')",
             "string" => "string('PASSED_DATA')",
@@ -99,6 +99,10 @@ class Migration{
                 }
             }
             $gotValues .= ";\n";
+        }
+        if($timestamps){
+            $gotValues .="\n\$table->timestamp('created_at')->useCurrent();";
+            $gotValues .="\n\$table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();";
         }
         //change here
         $toReturn = "Schema::create('$tableName', ";

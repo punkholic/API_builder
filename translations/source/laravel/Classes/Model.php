@@ -32,20 +32,19 @@ class Model{
             }
         }
        
-
-        
-        
-
-        //creating model
         chdir(PROJECT_PATH); // going to release 
        
  
         shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
 
         $fillable = array_merge($modelData->model->fillable, $undefined);
+        $insertingText = "";
+        if(!$modelData->model->timestamps){
+            $insertingText = "\n\tpublic \$timestamps = false;"; 
+        }
 
         // $insertingText = "\n\tprotected \$table = \n\n";
-        $insertingText = "\n\tprotected \$fillable = ['" . implode("','", $fillable) . "'];\n\n";
+        $insertingText .= "\n\tprotected \$fillable = ['" . implode("','", $fillable) . "'];\n\n";
         $insertingText .= "\n\tprotected \$guarded = ['" . implode("','", $modelData->model->guarded) . "'];\n\n";
 
         /**
