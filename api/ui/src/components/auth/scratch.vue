@@ -69,7 +69,7 @@
 
           <label for="models">Select Model</label>
 
-          <select id="models" @change="renderForm()" class="form-control" v-model="form.modelId" required>
+          <select id="models" @change="renderForm()" class="form-control" v-model="form.modelId">
             <option value="-1" selected>New Model</option>
           </select>
 
@@ -466,7 +466,7 @@ export default {
       let guarded_fields_needed = Guarded.split(",");
       let fillable_field = this.form.fillableFields;
       let fillable_field_needed = fillable_field.split(",");
-      let timestamp = this.form.timestamp;
+      let timestamp = this.form.timestamp == undefined ? false : this.form.timestamp;
 
       // For add fields in model
 
