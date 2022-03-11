@@ -1,29 +1,28 @@
 {
-    "config": {
-      "app_name": "tryed",
-      "programming_language": "laravel"
+  "config": {
+    "app_name": "eos_eos",
+    "programming_language": "laravel"
+  },
+  "data": [
+    {
+      "tableName": "test",
+      "db_fields" : [
+          "id",
+          "name",
+          "age",
+          "test3",
+          "seo_title"
+      ]
     },
-    "data": [
-      {
-        "tableName": "blog",
-        "db_fields" : [
-            "id",
-            "name",
-            "title",
-            "description",
-            "seo_title"
-        ]
-      },
-      {
-        "tableName": "user",
-        "db_fields" : [
-            "id",
-            "name",
-            "age",
-            "sex",
-            "password"
-        ]
-      }
-    ]
-  }
-  
+    {
+      "tableName": "product",
+      "db_fields" : [
+          "id",
+          "title",
+          "partner_id",
+          "category_id",
+          "proposed_price"
+      ]
+    }
+  ]
+}

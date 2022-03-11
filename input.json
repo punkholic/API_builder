@@ -1,164 +1,150 @@
 {
-    "config": {
-      "app_name": "tryed",
-      "programming-language": "laravel",
+  "config": {
+      "app_name": "Sit_beatae_eius_et_v",
+      "programming_langauge": "laravel",
       "mode": "development",
-      "database_name": "testApp",
-      "database_username": "root",
-      "database_password": ""
-    },
-    "data": [
+      "database_name": "Voluptates_laudantiu",
+      "database_username": "Aperiam_et_vero_non_",
+      "database_password": "",
+      "programming-language": "laravel"
+  },
+  "data": [
       {
-        "tableName": "blog",
-        "controller": "BlogController",
-        "model": {
-          "fields": {
-            "id": "primary",
-            "title": "string|required",
-            "description": "text|required",
-            "password": "hash|required",
-            "status": "enum|required",
-            "abc": "string"
-          },
-          "guarded": ["id", "password"],
-          "fillable": ["title", "description", "status", "abc"],
-          "mapping": [
-            {
-              "status": {
-                "0": "InActive",
-                "1": "Active"
-              }
-            },
-            {
-              "description": {
-                "xyz": "xyz",
-                "abc": "abc"
-              }
-            },
-            {
-              "abc": {
-                "456": "123",
-                "abc": "55"
-              }
-            }
-          ],
-          "timestamps": true,
-          "view": [
-            {
-              "fields": ["description", "status"],
-              "request": {
-                "type": "GET",
-                "route": "/testView",
-                "condition": [],
-                "name": "moreView"
-              }
-            }
-          ],
-          "add": [
-            {
-              "fields": ["description", "status", "abc", "password"],
-              "request": {
-                "type": "POST",
-                "route": "/testView2/{id}/{value}",
-                "name": "testView1"
-              }
-            },
-            {
-              "fields": ["description", "status"],
-              "request": {
-                "type": "GET",
-                "route": "/testView5",
-                "name": "testView2"
-              }
-            }
-          ],
-          "edit": [
-            {
-              "fields": ["description", "status"],
-              "request": {
-                "type": "POST",
-                "route": "/testView3/{id}/{value}",
-                "name": "testView3"
-              }
-            }
-          ],
-          "delete": [
-            {
-              "fields": ["description", "status"],
-              "request": {
-                "type": "POST",
-                "route": "/testView4",
-                "name": "testView4"
-              }
-            }
-          ]
-        }
+          "tableName": "Product",
+          "controller": "ProductController",
+          "model": {
+              "fields": {
+                  "id": "primary",
+                  "name": "string|required",
+                  "age": "integer|required",
+                  "sex": "enum|required",
+                  "seo_title": "string|required"
+              },
+              "guarded": [
+                  "Repudiandae_non_a_ni"
+              ],
+              "fillable": [
+                  "Voluptas_debitis_ill"
+              ],
+              "mapping": [],
+              "timestamps": true,
+              "view": [
+                  {
+                      "fields": [
+                          "Quas_corrupti_fugia"
+                      ],
+                      "request": {
+                          "type": "GET",
+                          "route": "Et_fuga_Modi_dolore",
+                          "name": "Hakeem_Slater"
+                      }
+                  }
+              ],
+              "add": [
+                  {
+                      "fields": [
+                          "Eos_ad_ratione_saepe"
+                      ],
+                      "request": {
+                          "type": "POST",
+                          "route": "Odio_animi_aut_aute",
+                          "name": "Salvador_Bishop"
+                      }
+                  }
+              ],
+              "edit": [
+                  {
+                      "fields": [
+                          "Rem_unde_sapiente_al"
+                      ],
+                      "request": {
+                          "type": "PATCH",
+                          "route": "Dolor_corrupti_sit",
+                          "name": "Zenaida_Tyler"
+                      }
+                  }
+              ],
+              "delete": [
+                  {
+                      "fields": [
+                          "Doloremque_tempor_ve"
+                      ],
+                      "request": {
+                          "type": "DELETE",
+                          "route": "Dolore_sint_earum_te",
+                          "name": "Tatiana_Chandler"
+                      }
+                  }
+              ]
+          }
       },
       {
-        "tableName": "more",
-        "controller": "MoreController",
-        "model": {
-          "fields": {
-            "id": "primary",
-            "name": "text",
-            "age": "integer",
-            "price": "decimal",
-            "password": "hash"
-          },
-          "guarded": ["id", "password"],
-          "fillable": ["name", "age", "price"],
-          "mapping": [],
-          "timestamps": true,
-          "view": [
-            {
-              "fields": ["name", "age", "price"],
-              "request": {
-                "type": "GET",
-                "route": "/getMore",
-                "name": "moreView1"
-              }
-            }
-          ],
-          "add": [
-            {
-              "fields": ["name", "age", "price"],
-              "request": {
-                "type": "POST",
-                "route": "/storeMore",
-                "name": "moreView2"
-              }
-            },
-            {
-              "fields": ["name", "age", "price"],
-              "request": {
-                "type": "POST",
-                "route": "/moreView5",
-                "name": "store"
-              }
-            }
-          ],
-          "edit": [
-            {
-              "fields": ["name", "age", "price"],
-              "request": {
-                "type": "POST",
-                "route": "/editMore/{id}",
-                "name": "moreView4"
-              }
-            }
-          ],
-          "delete": [
-            {
-              "fields": ["name", "age", "price"],
-              "request": {
-                "type": "DELETE",
-                "route": "/deleteMore/{id}",
-                "name": "moreView5"
-              }
-            }
-          ]
-        }
+          "tableName": "test",
+          "controller": "testController",
+          "model": {
+              "fields": {
+                  "id": "primary",
+                  "name": "string|required",
+                  "sex": "enum|required",
+                  "test3": "string|required"
+              },
+              "guarded": [
+                  "qwe"
+              ],
+              "fillable": [
+                  "asdasd"
+              ],
+              "mapping": [],
+              "timestamps": true,
+              "view": [
+                  {
+                      "fields": [
+                          "asd"
+                      ],
+                      "request": {
+                          "type": "GET",
+                          "route": "asd",
+                          "name": "asd"
+                      }
+                  }
+              ],
+              "add": [
+                  {
+                      "fields": [
+                          "sad"
+                      ],
+                      "request": {
+                          "type": "POST",
+                          "route": "asd",
+                          "name": "sad"
+                      }
+                  }
+              ],
+              "edit": [
+                  {
+                      "fields": [
+                          "qweqwe"
+                      ],
+                      "request": {
+                          "type": "PATCH",
+                          "route": "asd",
+                          "name": "sdawqerq"
+                      }
+                  }
+              ],
+              "delete": [
+                  {
+                      "fields": [
+                          "asdasdasd"
+                      ],
+                      "request": {
+                          "type": "DELETE",
+                          "route": "asdasdas",
+                          "name": "asdasda"
+                      }
+                  }
+              ]
+          }
       }
-    ]
-  }
-  
+  ]
+}
