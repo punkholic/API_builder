@@ -1,0 +1,87 @@
+{
+  "config": {
+      "app_name": "hello",
+      "programming_langauge": "laravel",
+      "mode": "development",
+      "database_name": "test",
+      "database_username": "root",
+      "database_password": "root",
+      "programming-language": "laravel"
+  },
+  "data": [
+      {
+          "tableName": "users",
+          "controller": "UsersController",
+          "model": {
+            "fields": {
+                "id": "primary",
+                "name": "string|required",
+                "age": "text|required",
+                "sex": "text|required"
+              },
+              "guarded": [
+                  "name",
+                  "age",
+                  "sex"
+              ],
+              "fillable": [
+                  "id",
+                  "name",
+                  "age",
+                  "sex"
+              ],
+              "mapping": [],
+              "view": [
+                  {
+                      "fields": [
+                          "name",
+                          "age",
+                          "sex"
+                      ],
+                      "request": {
+                          "type": "GET",
+                          "route": "\/id\/{a}",
+                          "name": "a"
+                      }
+                  }
+              ],
+              "add": [
+                  {
+                      "fields": [
+                          "a"
+                      ],
+                      "request": {
+                          "type": "POST",
+                          "route": "a",
+                          "name": "a"
+                      }
+                  }
+              ],
+              "edit": [
+                  {
+                      "fields": [
+                          "a"
+                      ],
+                      "request": {
+                          "type": "POST",
+                          "route": "a",
+                          "name": "a"
+                      }
+                  }
+              ],
+              "delete": [
+                  {
+                      "fields": [
+                          "a"
+                      ],
+                      "request": {
+                          "type": "DELETE",
+                          "route": "a",
+                          "name": "a"
+                      }
+                  }
+              ]
+          }
+      }
+  ]
+}

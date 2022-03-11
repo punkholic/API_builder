@@ -80,7 +80,7 @@ class Zip_builder extends Builder
         $language = $this->_config['config']['programming-language'];
         $language_ucase = ucfirst( $language );
        
-        $path = getcwd() . "/PastProjects/" . $language_ucase;
+        $path = $language_ucase;
         
         $filename = $path . "/" . $file_name . ".zip";
 

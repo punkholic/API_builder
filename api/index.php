@@ -49,6 +49,7 @@ require 'vendor/autoload.php';
                 break;
             }
         }  
+        
         $whitelisted_data_payload = [];
         foreach( $payload_data['data'] as $data_key => $data_value ){
             
@@ -57,17 +58,16 @@ require 'vendor/autoload.php';
             
             $controller_name_wspace = explode( " ", $data_value['controller'] );
             is_array( $controller_name_wspace ) ? ( $data_value['controller'] = implode( "_", $controller_name_wspace) ) : $data_value['controller'] = $data_value['controller'];
-            
+
             $model = $data_value['model'];
             if( $model ) {
                 foreach( $model as $model_key => $model_value ) {
                     if( is_array( $model_value ) ) {
                         foreach( $model_value as $m_key => $m_val ) {
-                           
                             if( ! is_array( $m_val ) ) {
                                 $value_w_space = explode( " ", $m_val );
                                 is_array( $value_w_space ) ? ( $m_val = implode( "_", $value_w_space) ) : $m_val = $m_val ;
-                                if( ! is_numeric( $m_key ) ) {
+                                if( ! is_numeric( $m_key ) && strpos($m_key, " ") !== false ) {
                                     $remove_key_w_space = explode( " ", $m_key );
                                     if( is_array( $remove_key_w_space ) ) { 
                                         $model_value[implode( "_", $remove_key_w_space)] = $m_val ;
@@ -102,8 +102,8 @@ require 'vendor/autoload.php';
             $whitelisted_data_payload[] = $data_value;
         } 
         $payload_data['data'] = $whitelisted_data_payload;  
-      
-    
+
+
         chdir( "../");
         $root_dir = getcwd();
         

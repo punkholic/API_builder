@@ -5,7 +5,7 @@ class Model{
     public function __construct($input){
         $this->jsonInput = $input;
        
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Models/";
+        $this->filePath = PROJECT_PATH . "/app/Models/";
         $this->processModel();
     }
 
@@ -16,7 +16,7 @@ class Model{
     }
 
     public function checkName($name){
-        $dirs = scandir("../release/app/Models");
+        $dirs = scandir(PROJECT_PATH . "/app/Models");
         foreach($dirs as $dir){
             if (!in_array($dir, array(".",".."))){
                 $fileNameToCheck = $dir;
@@ -50,7 +50,7 @@ class Model{
     }
 
     public function processEach($modelData){
-        chdir('../release/'); // going to release 
+        chdir(PROJECT_PATH); // going to release 
         echo shell_exec( Constant::COMMANDS['MAKE_MODEL'] . " $modelData->tableName");
 
         $fileName = $this->checkName($modelData->tableName);
@@ -77,7 +77,7 @@ class Model{
                     "table" => $modelData->tableName,
                     "primaryKey" => $primary,
                     "useSoftDeletes" => "true",
-                    "useTimestamps" => $modelData->model->timestamps == 1 ? "true" : "false",
+                    "useTimestamps" => "false",
                     "allowedFields" => $fillable,
         ];
 

@@ -4,7 +4,7 @@ class Route{
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
         $this->routeTo = ["view", "add", "edit", "delete"];
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Config/Routes.php";
+        $this->filePath = PROJECT_PATH . "/app/Config/Routes.php";
         $this->processRoute();
     }
 

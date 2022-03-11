@@ -3,13 +3,13 @@ class Controller{
 
     public function __construct($jsonData){
         $this->jsonInput = $jsonData;
-        $this->filePath = __DIR__ . PROJECT_PATH . "/app/Controllers/";
+        $this->filePath =  PROJECT_PATH . "/app/Controllers/";
         $this->toProcess = ["view", "edit", "add", "delete" ];
         $this->processModel();
     }
     
     public function processModel(){
-        chdir('../release/');
+        chdir(PROJECT_PATH);
         foreach($this->jsonInput->data as $data){
             
             echo shell_exec(Constant::COMMANDS['MAKE_CONTROLLER'] . " " . $data->controller );
@@ -25,7 +25,6 @@ class Controller{
         }
         $this->setControllersHeadings($modelData->tableName);
         file_put_contents("$this->filePath$modelData->controller.php", $this->controllerCode);
-        echo $this->controllerCode;
     }
     public function setControllersHeadings($tableName){
         $toCheck = [
@@ -92,7 +91,7 @@ class Controller{
     }
 
     public function checkName($name){
-        $dirs = scandir("../release/app/Models");
+        $dirs = scandir(PROJECT_PATH . "/app/Models");
         foreach($dirs as $dir){
             if (!in_array($dir, array(".",".."))){
                 $fileNameToCheck = $dir;
@@ -134,7 +133,6 @@ class Controller{
                 echo json_encode(\$data);
             }
             text;
-            echo $toReturn;
             $this->replaceFunction($value->request->name, $toReturn);
         }
     }
@@ -176,7 +174,7 @@ class Controller{
                     }
                 }
                 \$model->{$whereClause}set(\$toUpdate)->update();
-                echo json_encode(["Success" => true]); 
+                echo json_encode(["Success" => true]);
             }
             text;
             $this->replaceFunction($value->request->name, $toReturn);
