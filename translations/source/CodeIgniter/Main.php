@@ -8,7 +8,7 @@ include __DIR__."/includes/Common.php";
 
 class Main{
     public function __construct( $jsonFile ){
-        $path = "/home/punkholic/random/github/API_builder/release";
+        $path = "c://Users//Acer//Desktop//APPPP//API_builder//release";
         define("PROJECT_PATH", $path);
         // echo shell_exec( Constant::COMMANDS['CREATE_PROJECT'] . PROJECT_PATH);
         // echo shell_exec( "cd " . PROJECT_PATH . " && composer install");

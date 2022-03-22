@@ -63,13 +63,15 @@
         <h5 class="text-center">Model Setup</h5>
         <hr />
 
-
-
         <div class="input">
-
           <label for="models">Select Model</label>
 
-          <select id="models" @change="renderForm()" class="form-control" v-model="form.modelId">
+          <select
+            id="models"
+            @change="renderForm()"
+            class="form-control"
+            v-model="form.modelId"
+          >
             <option value="-1" selected>New Model</option>
           </select>
 
@@ -90,8 +92,14 @@
           <label for="model_fields">Fields</label>
           <div id="toAdd">
             <div id="toReplica">
-              <input type="text" required class="form-control" name="fields_test" id="fields_test" />
-           
+              <input
+                type="text"
+                required
+                class="form-control"
+                name="fields_test"
+                id="fields_test"
+              />
+
               <select class="form-control" v-model="fields_options" required>
                 <option value="primary" selected>primary</option>
                 <option value="text">text</option>
@@ -100,8 +108,8 @@
                 <option value="hash">hash</option>
               </select>
 
-               <label for="required">required</label>
-               <input type="checkbox" class="form-control"  />
+              <label for="required">required</label>
+              <input type="checkbox" class="form-control" />
             </div>
           </div>
           <button @click="replica()">Add More</button>
@@ -360,23 +368,21 @@ export default {
       databaseUsername: "root",
       databasePassword: "root",
       form: {
-        table_name: "Abc",
-        model_fields:
-          "user:id..integer,name..string|required,age..integer|required,sex..enum|required",
-        fillableFields: "id,name,age,sex",
-        guarded_fields: "name,age,sex",
-        view_fields: "name,age,sex",
-        view_request_name: "a",
-        view_request_route: "/id/{a}",
-        add_fields: "a",
-        add_request_route: "a",
-        add_request_name: "a",
-        edit_fields: "a",
-        edit_request_route: "a",
-        edit_request_name: "a",
-        delete_fields: "a",
-        delete_request_route: "a",
-        delete_request_name: "a",
+        table_name: "Blog",
+        fillableFields: "id,title,slug,description",
+        guarded_fields: "title,slug,description",
+        view_fields: "title,slug,description",
+        view_request_name: "view",
+        view_request_route: "/view/{id}",
+        add_fields: "title,slug,description",
+        add_request_route: "/add",
+        add_request_name: "store",
+        edit_fields: "title,slug,description",
+        edit_request_route: "/edit/{id}",
+        edit_request_name: "edit",
+        delete_fields: "title,slug,description",
+        delete_request_route: "/delete/{id}",
+        delete_request_name: "delete",
       },
       model: {},
       // selected: [],
@@ -386,7 +392,7 @@ export default {
     };
   },
   methods: {
-    clearForm(){
+    clearForm() {
       this.model_fields = "";
       this.form.modelData = "";
       this.form.guarded_fields = "";
@@ -407,66 +413,66 @@ export default {
       this.form.view_request_name = "";
 
       let toReplica = document.querySelector("#toReplica");
-      toReplica.querySelector("input[type='text']").value = ""
-      
-      let toRemove = toReplica.parentElement.parentElement.querySelectorAll("#toReplica")
+      toReplica.querySelector("input[type='text']").value = "";
+
+      let toRemove =
+        toReplica.parentElement.parentElement.querySelectorAll("#toReplica");
 
       for (let i = 0; i < toRemove.length; i++) {
-          if(i != 0 ){
-            toRemove[i].parentNode.removeChild(toRemove[i]);
-          }
+        if (i != 0) {
+          toRemove[i].parentNode.removeChild(toRemove[i]);
+        }
       }
     },
-    renderForm(){
-      if(this.form.modelId != -1){
-        this.form = this.formData[this.form.modelId]
-        let fields = this.data[this.form.modelId].model.fields
-        let index = 0
+    renderForm() {
+      if (this.form.modelId != -1) {
+        this.form = this.formData[this.form.modelId];
+        let fields = this.data[this.form.modelId].model.fields;
+        let index = 0;
 
-        Object.keys(fields).forEach(e => {
-          
-          if(index == 1){
-            this.replica()
+        Object.keys(fields).forEach((e) => {
+          if (index == 1) {
+            this.replica();
           }
-          let element = document.querySelectorAll("#toReplica")[index]
-          index = 1
+          let element = document.querySelectorAll("#toReplica")[index];
+          index = 1;
 
-          let selectValue = ""
-          if(fields[e].indexOf("required") == -1){
-            element.querySelector("input[type='text']").value = e
-            element.querySelector("select").value = fields[e]
-            selectValue = fields[e]
-          }else{
-            console.log(fields[e])
-            selectValue = fields[e].split("|")[0]
-            element.querySelector("input[type='checkbox']").setAttribute("checked", "")
-            element.querySelector("input[type='text']").value = selectValue
+          let selectValue = "";
+          if (fields[e].indexOf("required") == -1) {
+            element.querySelector("input[type='text']").value = e;
+            element.querySelector("select").value = fields[e];
+            selectValue = fields[e];
+          } else {
+            console.log(fields[e]);
+            selectValue = fields[e].split("|")[0];
+            element
+              .querySelector("input[type='checkbox']")
+              .setAttribute("checked", "");
+            element.querySelector("input[type='text']").value = selectValue;
           }
 
-          element.querySelectorAll("option").forEach(e => {
-              if(e.value == selectValue){
-                e.setAttribute("selected", "")
-              }
-            });
-
-
-        })
-
-      }else{
-        this.clearForm()
+          element.querySelectorAll("option").forEach((e) => {
+            if (e.value == selectValue) {
+              e.setAttribute("selected", "");
+            }
+          });
+        });
+      } else {
+        this.clearForm();
       }
     },
     replica() {
       let toReplica = document.querySelector("#toReplica");
       let toAdd = document.querySelector("#toAdd");
-      toAdd.insertAdjacentHTML("afterend", toReplica.outerHTML)
+      toAdd.insertAdjacentHTML("afterend", toReplica.outerHTML);
     },
     saveData() {
       let Guarded = this.form.guarded_fields;
       let guarded_fields_needed = Guarded.split(",");
       let fillable_field = this.form.fillableFields;
       let fillable_field_needed = fillable_field.split(",");
-      let timestamp = this.form.timestamp == undefined ? false : this.form.timestamp;
+      let timestamp =
+        this.form.timestamp == undefined ? false : this.form.timestamp;
 
       // For add fields in model
 
@@ -552,31 +558,31 @@ export default {
       edit_arr.push(edit_payload);
       delete_arr.push(delete_payload);
 
-
-
-      let fields_p_load = {}
-      let replicatedArray = document.querySelectorAll("#toReplica")
+      let fields_p_load = {};
+      let replicatedArray = document.querySelectorAll("#toReplica");
       let tableName = this.form.table_name;
 
-      replicatedArray.forEach(element => {
-        let isRequired = element.querySelector("input[type='checkbox']").checked
-        let field_type = element.querySelector("select").value
-        field_type = isRequired ? field_type + "|required" : field_type
-        let field_name = element.querySelector("input[type='text']").value
-        fields_p_load[field_name] = field_type
-     });
+      replicatedArray.forEach((element) => {
+        let isRequired = element.querySelector(
+          "input[type='checkbox']"
+        ).checked;
+        let field_type = element.querySelector("select").value;
+        field_type = isRequired ? field_type + "|required" : field_type;
+        let field_name = element.querySelector("input[type='text']").value;
+        fields_p_load[field_name] = field_type;
+      });
 
-    //   let model_fields = this.form.model_fields;
-    //   let ind_model_fields = model_fields.split(":");
-    //   // key : value
-    //   let tableName = ind_model_fields[0];
-    //   let ind_model_fields_data = ind_model_fields[1].split(",");
-    //   let temp_arr = [];
-    //   ind_model_fields_data.forEach((element) => {
-    //     let final = element.split("..");
-    //     this.$set(temp_arr, final[0], final[1]);
-    //   });
-    //   let fields_p_load = Object.assign({}, temp_arr);
+      //   let model_fields = this.form.model_fields;
+      //   let ind_model_fields = model_fields.split(":");
+      //   // key : value
+      //   let tableName = ind_model_fields[0];
+      //   let ind_model_fields_data = ind_model_fields[1].split(",");
+      //   let temp_arr = [];
+      //   ind_model_fields_data.forEach((element) => {
+      //     let final = element.split("..");
+      //     this.$set(temp_arr, final[0], final[1]);
+      //   });
+      //   let fields_p_load = Object.assign({}, temp_arr);
       let data_payload = {
         tableName: tableName,
         controller: tableName + "Controller",
@@ -599,18 +605,18 @@ export default {
        * Unsetting all The fields after the data are pushed in the global array
        */
 
-      let models = document.querySelector("#models")
-      if(models.value == -1 || models.value == ""){
-        let option = document.createElement("option")
-        option.textContent = `Model ${this.data.length}`
-        option.setAttribute("value", this.data.length - 1)
-        models.appendChild(option)
-        this.formData.push(Object.assign({}, this.form))
-      }else{
-        this.formData[this.form.modelId] = Object.assign({}, this.form)
+      let models = document.querySelector("#models");
+      if (models.value == -1 || models.value == "") {
+        let option = document.createElement("option");
+        option.textContent = `Model ${this.data.length}`;
+        option.setAttribute("value", this.data.length - 1);
+        models.appendChild(option);
+        this.formData.push(Object.assign({}, this.form));
+      } else {
+        this.formData[this.form.modelId] = Object.assign({}, this.form);
       }
 
-      this.clearForm()
+      this.clearForm();
       alert("Model info added successfully!");
     },
 

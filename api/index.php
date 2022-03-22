@@ -3,7 +3,6 @@
 
 require 'vendor/autoload.php';
 
-   
 
     Flight::route('/', function(){
         require "ui/index.html";
@@ -159,14 +158,16 @@ require 'vendor/autoload.php';
             exit(0);
         }
         chdir( "../uploads");
+        
         $search_dir = getcwd();
         $to_match = $id . ".json";
         $json_matches = [];
         $it = new RecursiveDirectoryIterator($search_dir);
+        
         foreach(new RecursiveIteratorIterator($it) as $file) {
             $FILE = array_flip(explode('.', $file));
             if (isset($FILE['json']) ) {
-                $dta = explode("/",$file);
+                $dta = explode("\\",$file);
                 $count = count($dta);
                 $json_name = $dta[$count-1];
                 if($json_name == $to_match )
@@ -175,6 +176,7 @@ require 'vendor/autoload.php';
                 }
             }
         }
+        
         $json_total = count( $json_matches );
         $json = $json_matches[ $json_total-1 ];
         $configuration = file_get_contents( $json );
@@ -326,20 +328,21 @@ require 'vendor/autoload.php';
                
         chdir("uploads");
         $uploads_root = getcwd();
-        
-        $language = $payload_data['config']['programming_language'];
+        $language = $payload_data['config']['programming_langauge'];
+
        
         $uc_lang = ucfirst( $language );
        
-        $path = $uploads_root ."/" . $uc_lang;
+        $path = $uploads_root ."\\" . $uc_lang;
         $files_list = scandir($path);
       
         // looping through the directory files usually the 1st 2 index will be . and ..
         // so we loop from 3rd index always
         $whitelisted_json = [];
-        
+        $json_id = $files_list[2]; //fix this
+
         for( $i = 2; $i < count( $files_list ); $i++ ) {
-            $json_we_have = file_get_contents($path . "/" . $files_list[$i] );
+            $json_we_have = file_get_contents($path . "\\" . $files_list[$i] ); // change delimeters
             $data = (array)json_decode($json_we_have);
            
             $points_count = 0;
@@ -394,9 +397,8 @@ require 'vendor/autoload.php';
            }
         }
     
-        if ( !empty( $whitelisted_json ) ) {
+        if ( true) {
             $smallest = 0;
-            $json_id = "";
             if ( count( $whitelisted_json ) == 1  ) {              
                 $json_id = key($whitelisted_json);
             } else {
@@ -412,7 +414,8 @@ require 'vendor/autoload.php';
         }
        
       
-        $json_data = file_get_contents( $path. '/' . $json_id );
+        $json_data = file_get_contents( $path. '\\' . $json_id ); // change delimeters
+
       
         chdir("../translations");
      
