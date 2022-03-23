@@ -1,6 +1,6 @@
 <template>
   <div id="signin">
-    <div class="signin-form">
+    <div class="signin-form" v-show="!this.visible">
       <form @submit.prevent>
         <h5 class="text-center">Configuration setup</h5>
         <hr />
@@ -10,14 +10,13 @@
             type="text"
             class="form-control"
             v-model="appName"
-            required
             id=""
             placeholder="application name"
           />
         </div>
         <div class="input">
           <label for="planguage">Programming language</label>
-          <select class="form-control" v-model="programmingLanguage" required>
+          <select class="form-control" v-model="programmingLanguage">
             <option value="laravel" selected>Laravel</option>
             <option value="codeigniter">Codeigniter</option>
           </select>
@@ -41,7 +40,6 @@
           <label for="table_name">Table Name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.table_name"
             name="table_name"
@@ -57,7 +55,6 @@
             <div id="toReplica">
               <input
                 type="text"
-                required
                 class="form-control"
                 name="fields_test"
                 id="fields_test"
@@ -74,8 +71,25 @@
         <div class="submit">
           <button @click="onSubmit">Recommend</button>
         </div>
+        <div class="input hobbies">
+          <button
+            class="btn btn-default"
+            id="download_btn"
+            @click="downloadProject()"
+            style="display: none"
+          >
+            Download Recommended project
+          </button>
+        </div>
       </form>
     </div>
+    <img
+      src="https://i.gifer.com/4V0b.gif"
+      class="image"
+      alt=""
+      v-fi="visible"
+      v-show="this.visible"
+    />
   </div>
 </template>
 
@@ -84,7 +98,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      appName: "hello",
+      visible: false,
+      appName: "Blog",
       programmingLanguage: "laravel",
       form: {
         table_name: "Abc",
@@ -178,8 +193,6 @@ export default {
         this.formData.push(Object.assign({}, this.form));
       } else {
         this.formData[this.form.modelId] = Object.assign({}, this.form);
-        console.log(this.formData);
-        return;
       }
 
       this.clearForm();
@@ -187,6 +200,7 @@ export default {
     },
 
     onSubmit() {
+      this.visible = true;
       let config = {
         app_name: this.appName,
         programming_langauge: this.programmingLanguage,
@@ -203,17 +217,24 @@ export default {
       axios
         .post("http://localhost:9000/recommend/", formData)
         .then(function (response) {
+          self.visible = false;
+
           self.zip_path = response.data.zip_link;
           let d_btn = document.getElementById("download_btn");
           d_btn.style.display = "block";
           alert("Project built successfully!");
-          // self.$router.push("/completion/" + id);
         })
-        .catch((error) => {
+        .catch((err) => {
+          self.visible = false;
+
+          // console.log(err);
           let d_btn = document.getElementById("download_btn");
           d_btn.style.display = "none";
-          alert(" No recommendation Found !");
+          alert("Oops ! Something Went wrong ");
         });
+    },
+    downloadProject() {
+      window.location.href = require(`../../../../../PastProjects/${this.zip_path}`);
     },
   },
 };
@@ -308,5 +329,12 @@ export default {
 }
 .hobbies input {
   width: 90%;
+}
+.image {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
 }
 </style>

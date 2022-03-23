@@ -1,6 +1,6 @@
 <template>
   <div id="signin">
-    <div class="signin-form">
+    <div class="signin-form" v-show="!this.visible">
       <form @submit.prevent>
         <h5 class="text-center">Configuration setup</h5>
         <hr />
@@ -78,7 +78,6 @@
           <label for="table_name">Table Name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.table_name"
             name="table_name"
@@ -94,7 +93,6 @@
             <div id="toReplica">
               <input
                 type="text"
-                required
                 class="form-control"
                 name="fields_test"
                 id="fields_test"
@@ -119,7 +117,6 @@
           <label for="fillableFields">Fillable For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.fillableFields"
             name="fillableFields"
@@ -134,7 +131,6 @@
           <label for="guarded_fields">Guarded Fields For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.guarded_fields"
             name="guarded_fields"
@@ -153,7 +149,6 @@
           <label for="view_fields">View Fields For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.view_fields"
             name="view_fields"
@@ -169,7 +164,6 @@
           <label for="view_request_route">View request route</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.view_request_route"
             name="view_request_route"
@@ -184,7 +178,6 @@
           <label for="view_request_name">View request name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.view_request_name"
             name="view_request_name"
@@ -198,7 +191,6 @@
           <label for="add_fields">Add Fields For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.add_fields"
             name="add_fields"
@@ -213,7 +205,6 @@
           <label for="add_request_route">Add request route</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.add_request_route"
             name="add_request_route"
@@ -227,7 +218,6 @@
           <label for="add_request_name">Add request name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.add_request_name"
             name="add_request_name"
@@ -242,7 +232,6 @@
           <label for="edit_fields">Edit Fields For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.edit_fields"
             name="edit_fields"
@@ -265,7 +254,6 @@
           <label for="edit_request_route">Edit request route</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.edit_request_route"
             name="edit_request_route"
@@ -279,7 +267,6 @@
           <label for="edit_request_name">Edit request name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.edit_request_name"
             name="edit_request_name"
@@ -294,7 +281,6 @@
           <label for="delete_fields">Delete Fields For Model</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.delete_fields"
             name="delete_fields"
@@ -309,7 +295,6 @@
           <label for="delete_request_route">Delete request route</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.delete_request_route"
             name="delete_request_route"
@@ -325,7 +310,6 @@
           <label for="delete_request_name">Delete request name</label>
           <input
             type="text"
-            required
             class="form-control"
             v-model="form.delete_request_name"
             name="delete_request_name"
@@ -353,6 +337,13 @@
         </div>
       </form>
     </div>
+    <img
+      src="https://i.gifer.com/4V0b.gif"
+      class="image"
+      alt=""
+      v-fi="visible"
+      v-show="this.visible"
+    />
   </div>
 </template>
 
@@ -361,12 +352,13 @@ import axios from "axios";
 export default {
   data() {
     return {
-      appName: "hello",
+      visible: false,
+      appName: "Api_Builder",
       programmingLanguage: "laravel",
       editRequest: "",
       databaseName: "test",
       databaseUsername: "root",
-      databasePassword: "root",
+      databasePassword: "",
       form: {
         table_name: "Blog",
         fillableFields: "id,title,slug,description",
@@ -621,6 +613,7 @@ export default {
     },
 
     onSubmit() {
+      this.visible = true;
       let config = {
         app_name: this.appName,
         programming_langauge: this.programmingLanguage,
@@ -643,9 +636,13 @@ export default {
       axios
         .post("http://localhost:9000/save/" + id, formData)
         .then(function (response) {
+          self.visible = false;
+
           self.$router.push("/completion/" + id);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          self.visible = false;
+        });
     },
   },
 };
@@ -677,7 +674,13 @@ export default {
   box-sizing: border-box;
   border: 1px solid #ccc;
 }
-
+.image {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
+}
 .input input:focus {
   outline: none;
   border: 1px solid #521751;

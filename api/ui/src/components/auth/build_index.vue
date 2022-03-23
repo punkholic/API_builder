@@ -48,7 +48,8 @@ export default {
   methods: {
     buildProject() {
       let self = this;
-
+      // console.log(this.visible);
+      // return;
       axios
         .post(
           "http://localhost:9000/build_project/" + this.$route.params.id,
@@ -62,6 +63,7 @@ export default {
         })
         .catch((err) => {
           // console.log(err);
+
           let d_btn = document.getElementById("download_btn");
           d_btn.style.display = "none";
           alert("Error building the project !");
@@ -83,7 +85,13 @@ export default {
   padding: 60px;
   box-shadow: 0 2px 3px #ccc;
 }
-
+.image {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
+}
 .input {
   margin: 15px auto;
 }
