@@ -234,7 +234,7 @@ export default {
         });
     },
     downloadProject() {
-      window.location.href = require(`../../../../../PastProjects/${this.zip_path}`);
+      window.location.href = ("http://localhost:9000/download_zip/" + this.zip_path.split(".")[0])
     },
   },
 };

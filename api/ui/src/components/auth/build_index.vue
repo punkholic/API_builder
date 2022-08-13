@@ -20,6 +20,13 @@
         </div>
       </form>
     </div>
+    <img
+      src="https://i.gifer.com/4V0b.gif"
+      class="image"
+      alt=""
+      v-fi="visible"
+      v-show="this.visible"
+    />
   </div>
 </template>
 
@@ -36,9 +43,12 @@ export default {
       axios
         .get("http://localhost:9000/retrieve/" + this.$route.params.id)
         .then((response) => {
+          self.visible = false;
+
           this.jsonData = response.data;
         })
         .catch((err) => {
+          self.visible = false;
           console.log(err);
           // dispatch({type: Actions.FETCH_DATA_ERROR, payload: err})
         })
@@ -47,6 +57,8 @@ export default {
 
   methods: {
     buildProject() {
+      this.visible = true;
+
       let self = this;
       // console.log(this.visible);
       // return;
@@ -71,7 +83,8 @@ export default {
     },
 
     downloadProject() {
-      window.location.href = require(`../../../../../PastProjects/${this.zip_path}`);
+      
+      window.location.href = ("http://localhost:9000/download_zip/" + this.zip_path.split(".")[0])
     },
   },
 };
@@ -172,5 +185,12 @@ export default {
 }
 .hobbies input {
   width: 90%;
+}
+.image {
+  position: absolute;
+  top: 68%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
 }
 </style>

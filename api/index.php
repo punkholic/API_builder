@@ -163,16 +163,16 @@ require 'vendor/autoload.php';
         $to_match = $id . ".json";
         $json_matches = [];
         $it = new RecursiveDirectoryIterator($search_dir);
-        
         foreach(new RecursiveIteratorIterator($it) as $file) {
             $FILE = array_flip(explode('.', $file));
             if (isset($FILE['json']) ) {
-                $dta = explode("\\",$file);
+                $dta = explode("/",$file);
                 $count = count($dta);
                 $json_name = $dta[$count-1];
-                if($json_name == $to_match )
+                $rawJSONPath = explode("/",$json_name);
+                if($rawJSONPath[count($rawJSONPath) -1] == $to_match )
                 {
-                    $json_matches[] = $dta[$count-2] . "/" . $json_name ;
+                    $json_matches[] = $dta[0];
                 }
             }
         }
@@ -181,7 +181,6 @@ require 'vendor/autoload.php';
         $json = $json_matches[ $json_total-1 ];
         $configuration = file_get_contents( $json );
         
-        echo $configuration;
         http_response_code(200);
         exit;
     }, 'GET');
@@ -205,11 +204,10 @@ require 'vendor/autoload.php';
 
             exit(0);
         }
-        
+    
         $json = file_get_contents('php://input', TRUE);
         $payload_data = json_decode($json, true);
         $language = $payload_data['config']['programming-language'];
- 
       
         chdir( "../uploads");
         $root_dir = getcwd();
@@ -236,7 +234,7 @@ require 'vendor/autoload.php';
         exit;
     }, 'POST');
     
-    Flight::route('/download_zip', function () {
+    Flight::route('/download_zip/@file:[\w\W.]+', function ($filename) {
        
         if (isset( $_SERVER['HTTP_ORIGIN'] )) {
             header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -255,44 +253,30 @@ require 'vendor/autoload.php';
 
             exit(0);
         }
-      
-        $json = file_get_contents('php://input', TRUE);
-      
-        $payload_data = json_decode($json, true);
-     
-        $zip_file = $payload_data['zip_path'];
-        $zip_data = explode("/", $zip_file );
-        $uri_count = count( $zip_data );
-        $file_name = $zip_data[$uri_count-1];
-        $file_folder_name = $zip_data[$uri_count-2];
+        $filename = "{$filename}.zip";
+        chdir("../PastProjects/");
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header("Cache-Control: no-cache, must-revalidate");
+            header("Expires: 0");
+            header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+            header('Content-Length: ' . filesize($filename));
+            header('Pragma: public');
 
-        chdir("../PastProjects/".$file_folder_name );
-        $projects_dir = getcwd();
-    
-        header('Content-Type: application/zip');
-        header("Content-Type: application/force-download");
-        header('Content-Disposition: attachment; filename="xx.zip"');
-        // header('Content-Length: ' . filesize($zip_file));
-        flush();
-        var_dump(readfile($zip_file));
-        die();
-        // header('Content-disposition: attachment; filename=Api_builder_project.zip');
-        // header('Content-type: application/zip');
-        // readfile($zip_path);
+            //Clear system output buffer
+            flush();
 
-        // header("Content-type: application/zip");
-        // header("Content-Disposition: attachment; filename=xyz.zip");
-        // header("Pragma: no-cache");
-        // header("Expires: 0");
-        // readfile($zip_file);
-        exit;
-       
+            //Read the size of the file
+            readfile($filename);
+
+            //Terminate from the script
+            die();        
         echo json_encode([
-            'success' => "Success"
+            'success' => "success"
         ]);
         http_response_code(200);
         exit;
-    }, 'POST');
+    }, 'GET');
 
     Flight::route('/recommend', function () {
         
@@ -333,7 +317,7 @@ require 'vendor/autoload.php';
        
         $uc_lang = ucfirst( $language );
        
-        $path = $uploads_root ."\\" . $uc_lang;
+        $path = $uploads_root ."/" . $uc_lang;
         $files_list = scandir($path);
       
         // looping through the directory files usually the 1st 2 index will be . and ..
@@ -342,7 +326,7 @@ require 'vendor/autoload.php';
         $json_id = $files_list[2]; //fix this
 
         for( $i = 2; $i < count( $files_list ); $i++ ) {
-            $json_we_have = file_get_contents($path . "\\" . $files_list[$i] ); // change delimeters
+            $json_we_have = file_get_contents($path . "/" . $files_list[$i] ); // change delimeters
             $data = (array)json_decode($json_we_have);
            
             $points_count = 0;
@@ -412,9 +396,8 @@ require 'vendor/autoload.php';
                 }
             }
         }
-       
       
-        $json_data = file_get_contents( $path. '\\' . $json_id ); // change delimeters
+        $json_data = file_get_contents( $path. '/' . $json_id ); // change delimeters
 
       
         chdir("../translations");

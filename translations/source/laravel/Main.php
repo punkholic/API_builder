@@ -9,7 +9,7 @@ include __DIR__."/includes/Common.php";
 class Main{
 
     public function __construct( $jsonFile ) { 
-        $path = "c://Users//Acer//Desktop//APPPP//API_builder//release";
+        $path = "/home/punkholic/random/API_builder/release";
         // echo shell_exec("rm -rf $path");
         // echo shell_exec("mkdir $path");
         define("PROJECT_PATH", $path);

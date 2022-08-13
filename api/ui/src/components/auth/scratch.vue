@@ -358,7 +358,7 @@ export default {
       editRequest: "",
       databaseName: "test",
       databaseUsername: "root",
-      databasePassword: "",
+      databasePassword: "root",
       form: {
         table_name: "Blog",
         fillableFields: "id,title,slug,description",
@@ -385,24 +385,24 @@ export default {
   },
   methods: {
     clearForm() {
-      this.model_fields = "";
-      this.form.modelData = "";
-      this.form.guarded_fields = "";
-      this.form.fillableFields = "";
-      this.form.timestamp = 0;
-      this.form.add_fields = "";
-      this.form.add_request_route = "";
-      this.form.add_request_name = "";
-      this.form.edit_fields = "";
-      this.form.edit_request_route = "";
-      this.form.edit_request_name = "";
-      this.form.delete_fields = "";
-      this.form.delete_request_route = "";
-      this.form.delete_request_name = "";
-      this.form.table_name = "";
-      this.form.view_fields = "";
-      this.form.view_request_route = "";
-      this.form.view_request_name = "";
+      // this.model_fields = "";
+      // this.form.modelData = "";
+      // this.form.guarded_fields = "";
+      // this.form.fillableFields = "";
+      // this.form.timestamp = 0;
+      // this.form.add_fields = "";
+      // this.form.add_request_route = "";
+      // this.form.add_request_name = "";
+      // this.form.edit_fields = "";
+      // this.form.edit_request_route = "";
+      // this.form.edit_request_name = "";
+      // this.form.delete_fields = "";
+      // this.form.delete_request_route = "";
+      // this.form.delete_request_name = "";
+      // this.form.table_name = "";
+      // this.form.view_fields = "";
+      // this.form.view_request_route = "";
+      // this.form.view_request_name = "";
 
       let toReplica = document.querySelector("#toReplica");
       toReplica.querySelector("input[type='text']").value = "";
@@ -435,7 +435,6 @@ export default {
             element.querySelector("select").value = fields[e];
             selectValue = fields[e];
           } else {
-            console.log(fields[e]);
             selectValue = fields[e].split("|")[0];
             element
               .querySelector("input[type='checkbox']")
