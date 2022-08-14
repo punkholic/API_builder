@@ -166,13 +166,12 @@ require 'vendor/autoload.php';
         foreach(new RecursiveIteratorIterator($it) as $file) {
             $FILE = array_flip(explode('.', $file));
             if (isset($FILE['json']) ) {
-                $dta = explode("/",$file);
+                $dta = explode("\\",$file);
                 $count = count($dta);
                 $json_name = $dta[$count-1];
-                $rawJSONPath = explode("/",$json_name);
-                if($rawJSONPath[count($rawJSONPath) -1] == $to_match )
+                if(strpos($json_name, $to_match) )
                 {
-                    $json_matches[] = $dta[0];
+                    $json_matches[] = $json_name ;
                 }
             }
         }
@@ -180,7 +179,7 @@ require 'vendor/autoload.php';
         $json_total = count( $json_matches );
         $json = $json_matches[ $json_total-1 ];
         $configuration = file_get_contents( $json );
-        
+        echo $configuration;
         http_response_code(200);
         exit;
     }, 'GET');

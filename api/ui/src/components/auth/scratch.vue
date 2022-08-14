@@ -101,8 +101,12 @@
               <select class="form-control" v-model="fields_options" required>
                 <option value="primary" selected>primary</option>
                 <option value="text">text</option>
+                <option value="string">string</option>
                 <option value="integer">integer</option>
+                <option value="date">date</option>
+                <option value="datetime">datetime</option>
                 <option value="decimal">decimal</option>
+                <option value="enum">enum</option>
                 <option value="hash">hash</option>
               </select>
 
@@ -245,7 +249,7 @@
         <div class="input">
           <label for="edittype">Edit request Type</label>
           <select class="form-control" v-model="editRequest" required>
-            <option value="PUT" selected>PUT</option>
+            <option value="POST" selected>POST</option>
             <option value="PATCH">PATCH</option>
           </select>
         </div>
@@ -360,19 +364,19 @@ export default {
       databaseUsername: "root",
       databasePassword: "root",
       form: {
-        table_name: "Blog",
+        table_name: "blog",
         fillableFields: "id,title,slug,description",
         guarded_fields: "title,slug,description",
         view_fields: "title,slug,description",
         view_request_name: "view",
-        view_request_route: "/view/{id}",
+        view_request_route: "/view/",
         add_fields: "title,slug,description",
         add_request_route: "/add",
         add_request_name: "store",
         edit_fields: "title,slug,description",
         edit_request_route: "/edit/{id}",
         edit_request_name: "edit",
-        delete_fields: "title,slug,description",
+        delete_fields: "",
         delete_request_route: "/delete/{id}",
         delete_request_name: "delete",
       },
