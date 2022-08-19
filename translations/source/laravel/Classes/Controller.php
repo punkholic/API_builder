@@ -169,13 +169,15 @@ class Controller{
             
             $optionalHashString = ""; 
             $requiredHashString = "";
-            
-            if ( array_keys($fieldsInfo, 'hash') ) {
+
+            if ( array_key_exists('hash', $fieldsInfo) ) {
                 $optionalHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['optional']);
                 $requiredHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['required']);
-                
                 foreach($requiredHash as $data){
                     $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
+                }
+                foreach($optionalHash as $data){
+                    $optionalHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
                 }
             }
            
