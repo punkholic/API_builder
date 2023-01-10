@@ -95,7 +95,7 @@ class Controller{
             $functionTop = $this->getFunctionParams($value);
 
             $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
-            $selectData = "*";
+            $selectData = "'*'";
             $validFields = (array_intersect($allFields, $value->fields));
             if(!empty($validFields)){
                 $selectData = "";

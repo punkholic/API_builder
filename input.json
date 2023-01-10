@@ -1,150 +1,504 @@
 {
-  "config": {
-      "app_name": "Sit_beatae_eius_et_v",
-      "programming_langauge": "laravel",
-      "mode": "development",
-      "database_name": "Voluptates_laudantiu",
-      "database_username": "Aperiam_et_vero_non_",
-      "database_password": "",
-      "programming-language": "laravel"
-  },
-  "data": [
-      {
-          "tableName": "Product",
-          "controller": "ProductController",
-          "model": {
-              "fields": {
-                  "id": "primary",
-                  "name": "string|required",
-                  "age": "integer|required",
-                  "sex": "enum|required",
-                  "seo_title": "string|required"
-              },
-              "guarded": [
-                  "Repudiandae_non_a_ni"
-              ],
-              "fillable": [
-                  "Voluptas_debitis_ill"
-              ],
-              "mapping": [],
-              "timestamps": true,
-              "view": [
-                  {
-                      "fields": [
-                          "Quas_corrupti_fugia"
-                      ],
-                      "request": {
-                          "type": "GET",
-                          "route": "Et_fuga_Modi_dolore",
-                          "name": "Hakeem_Slater"
-                      }
-                  }
-              ],
-              "add": [
-                  {
-                      "fields": [
-                          "Eos_ad_ratione_saepe"
-                      ],
-                      "request": {
-                          "type": "POST",
-                          "route": "Odio_animi_aut_aute",
-                          "name": "Salvador_Bishop"
-                      }
-                  }
-              ],
-              "edit": [
-                  {
-                      "fields": [
-                          "Rem_unde_sapiente_al"
-                      ],
-                      "request": {
-                          "type": "PATCH",
-                          "route": "Dolor_corrupti_sit",
-                          "name": "Zenaida_Tyler"
-                      }
-                  }
-              ],
-              "delete": [
-                  {
-                      "fields": [
-                          "Doloremque_tempor_ve"
-                      ],
-                      "request": {
-                          "type": "DELETE",
-                          "route": "Dolore_sint_earum_te",
-                          "name": "Tatiana_Chandler"
-                      }
-                  }
-              ]
-          }
-      },
-      {
-          "tableName": "test",
-          "controller": "testController",
-          "model": {
-              "fields": {
-                  "id": "primary",
-                  "name": "string|required",
-                  "sex": "enum|required",
-                  "test3": "string|required"
-              },
-              "guarded": [
-                  "qwe"
-              ],
-              "fillable": [
-                  "asdasd"
-              ],
-              "mapping": [],
-              "timestamps": true,
-              "view": [
-                  {
-                      "fields": [
-                          "asd"
-                      ],
-                      "request": {
-                          "type": "GET",
-                          "route": "asd",
-                          "name": "asd"
-                      }
-                  }
-              ],
-              "add": [
-                  {
-                      "fields": [
-                          "sad"
-                      ],
-                      "request": {
-                          "type": "POST",
-                          "route": "asd",
-                          "name": "sad"
-                      }
-                  }
-              ],
-              "edit": [
-                  {
-                      "fields": [
-                          "qweqwe"
-                      ],
-                      "request": {
-                          "type": "PATCH",
-                          "route": "asd",
-                          "name": "sdawqerq"
-                      }
-                  }
-              ],
-              "delete": [
-                  {
-                      "fields": [
-                          "asdasdasd"
-                      ],
-                      "request": {
-                          "type": "DELETE",
-                          "route": "asdasdas",
-                          "name": "asdasda"
-                      }
-                  }
-              ]
-          }
-      }
-  ]
+    "config": {
+        "app_name": "Sit_beatae_eius_et_v",
+        "programming_langauge": "laravel",
+        "mode": "development",
+        "database_name": "Voluptates_laudantiu",
+        "database_username": "Aperiam_et_vero_non_",
+        "database_password": "",
+        "programming-language": "laravel"
+    },
+    "data": [
+        {
+            "tableName": "faculties",
+            "controller": "FacultiesController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "faculty_name": "string|required",
+                    "course_name": "string|required",
+                    "faculty_description": "string",
+                    "faculty_published": "string|required"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "faculty_name",
+                    "course_name",
+                    "faculty_description",
+                    "faculty_published"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "faculty_name",
+                            "course_name",
+                            "faculty_description",
+                            "faculty_published"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewfaculties",
+                            "name": "viewfaculties"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "faculty_name",
+                            "course_name",
+                            "faculty_description",
+                            "faculty_published"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addfaculties",
+                            "name": "addfaculties"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "faculty_name",
+                            "course_name",
+                            "faculty_description",
+                            "faculty_published"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "facultiesEdit/{id}",
+                            "name": "facultiesEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "deletefaculties/{id}",
+                            "name": "deletefaculties"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "tableName": "exams",
+            "controller": "ExamsController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "exam_name": "string|required",
+                    "exam_description": "string"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "exam_name",
+                    "exam_description"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "exam_name",
+                            "exam_description"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewexams",
+                            "name": "viewexams"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "exam_name",
+                            "exam_description"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addexams",
+                            "name": "addexams"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "exam_name",
+                            "exam_description"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "examsEdit/{id}",
+                            "name": "examsEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "deleteexams/{id}",
+                            "name": "deleteexams"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "tableName": "exam_subjects",
+            "controller": "ExamSubjectsController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "subject_title": "string|required",
+                    "exam_id": "integer|required",
+                    "subject_fullmarks": "integer|required",
+                    "subject_passmarks": "integer|required"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "subject_title",
+                    "exam_id",
+                    "subject_fullmarks",
+                    "subject_passmarks"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "subject_title",
+                            "exam_id",
+                            "subject_fullmarks",
+                            "subject_passmarks"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewexam_subjects",
+                            "name": "viewexam_subjects"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "subject_title",
+                            "exam_id",
+                            "subject_fullmarks",
+                            "subject_passmarks"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addexam_subjects",
+                            "name": "addexam_subjects"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "subject_title",
+                            "exam_id",
+                            "subject_fullmarks",
+                            "subject_passmarks"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "exam_subjectsEdit/{id}",
+                            "name": "exam_subjectsEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "exam_subjectsfaculty/{id}",
+                            "name": "exam_subjectsfaculty"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "tableName": "students",
+            "controller": "StudentsController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "student_fullname": "string|required",
+                    "student_rollnumber": "integer|required",
+                    "student_enrollnumber": "integer|required",
+                    "student_contactaddress": "string|required",
+                    "student_faculty": "integer|required"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "student_fullname",
+                    "student_rollnumber",
+                    "student_enrollnumber",
+                    "student_contactaddress",
+                    "student_faculty"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "student_fullname",
+                            "student_rollnumber",
+                            "student_enrollnumber",
+                            "student_contactaddress",
+                            "student_faculty"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewstudents",
+                            "name": "viewstudents"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "student_fullname",
+                            "student_rollnumber",
+                            "student_enrollnumber",
+                            "student_contactaddress",
+                            "student_faculty"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addstudents",
+                            "name": "addstudents"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "student_fullname",
+                            "student_rollnumber",
+                            "student_enrollnumber",
+                            "student_contactaddress",
+                            "student_faculty"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "studentsEdit/{id}",
+                            "name": "studentsEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "deletestudents/{id}",
+                            "name": "deletestudents"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "tableName": "exam_subject_marks",
+            "controller": "ExamSubjectMarksController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "student_id": "integer|required",
+                    "exam_id": "integer|required",
+                    "exam_year": "integer|required",
+                    "exam_subject_id": "integer|required",
+                    "exam_marks_obtained": "decimal|required",
+                    "result": "string|required"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "student_id",
+                    "exam_id",
+                    "exam_year",
+                    "exam_subject_id",
+                    "exam_marks_obtained",
+                    "result"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "student_id",
+                            "exam_id",
+                            "exam_year",
+                            "exam_subject_id",
+                            "exam_marks_obtained",
+                            "result"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewexam_subject_marks",
+                            "name": "viewexam_subject_marks"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "student_id",
+                            "exam_id",
+                            "exam_year",
+                            "exam_subject_id",
+                            "exam_marks_obtained",
+                            "result"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addexam_subject_marks",
+                            "name": "addexam_subject_marks"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "student_id",
+                            "exam_id",
+                            "exam_year",
+                            "exam_subject_id",
+                            "exam_marks_obtained",
+                            "result"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "exam_subject_marksEdit/{id}",
+                            "name": "exam_subject_marksEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "deleteexam_subject_marks/{id}",
+                            "name": "deleteexam_subject_marks"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "tableName": "student_exam_results",
+            "controller": "StudentExamResultsController",
+            "model": {
+                "fields": {
+                    "id": "primary",
+                    "exam_id": "integer|required",
+                    "total_marks_obtained": "decimal|required",
+                    "gpa": "decimal|required",
+                    "remarks": "string|required"
+                },
+                "guarded": [
+                    
+                ],
+                "fillable": [
+                    "id",
+                    "exam_id",
+                    "total_marks_obtained",
+                    "gpa",
+                    "remarks"
+                ],
+                "mapping": [],
+                "timestamps": false,
+                "view": [
+                    {
+                        "fields": [
+                            "id",
+                            "exam_id",
+                            "total_marks_obtained",
+                            "gpa",
+                            "remarks"
+                        ],
+                        "request": {
+                            "type": "GET",
+                            "route": "viewstudent_exam_results",
+                            "name": "viewstudent_exam_results"
+                        }
+                    }
+                ],
+                "add": [
+                    {
+                        "fields": [
+                            "exam_id",
+                            "total_marks_obtained",
+                            "gpa",
+                            "remarks"
+                        ],
+                        "request": {
+                            "type": "POST",
+                            "route": "addstudent_exam_results",
+                            "name": "addstudent_exam_results"
+                        }
+                    }
+                ],
+                "edit": [
+                    {
+                        "fields": [
+                            "exam_id",
+                            "total_marks_obtained",
+                            "gpa",
+                            "remarks"
+                        ],
+                        "request": {
+                            "type": "PATCH",
+                            "route": "student_exam_resultsEdit/{id}",
+                            "name": "student_exam_resultsEdit"
+                        }
+                    }
+                ],
+                "delete": [
+                    {
+                        "fields": [],
+                        "request": {
+                            "type": "DELETE",
+                            "route": "deletestudent_exam_results/{id}",
+                            "name": "deletestudent_exam_results"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
 }
