@@ -1,7 +1,7 @@
 <?php
 include_once("Application_builder.php");
 
-$app = new Application_builder(file_get_contents(__DIR__ . '/../input.json'));
+$app = new Application_builder(file_get_contents(__DIR__ . '/../test.json'));
 $app->build();
 
 // $path = "../release";

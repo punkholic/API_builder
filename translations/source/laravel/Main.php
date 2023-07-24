@@ -9,7 +9,7 @@ include __DIR__."/includes/Common.php";
 class Main{
 
     public function __construct( $jsonFile ) { 
-        $path = "/home/punkholic/random/API_builder/release";
+        $path = "/home/punkholic/random/github/API_builder/release";
         // echo shell_exec("rm -rf $path");
         // echo shell_exec("mkdir $path");
         define("PROJECT_PATH", $path);
@@ -25,7 +25,7 @@ class Main{
 
         // $this->makeAuth();
     
-        // Common::override_env();  
+        // Common::override_env();
       
         $this->model = new Model( $this->jsonInput );
         $this->route = new Route( $this->jsonInput );

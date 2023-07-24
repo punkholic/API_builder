@@ -45,8 +45,11 @@ class Controller{
             }
         }
     }
-    public function getArrayString($arrayName, $array, $type){
+    public function getArrayString($arrayName, $array, $type, $named=true){
         $toReturn = "\$$arrayName = [";
+        if(!$named){
+            $toReturn = "[";
+        }
         // if(array_values($array) !== $array){ didnt worked
         if($type !== "list"){
             // dict
@@ -58,7 +61,11 @@ class Controller{
                 $toReturn .= "'$value', ";
             }
         }
-        $toReturn .= "];";
+        $toReturn .= "]";
+
+        if($named){
+            $toReturn .= ";";
+        }
         return $toReturn;
     }
     
@@ -129,31 +136,95 @@ class Controller{
         return ["whereClause" =>$whereClause, "fields" => $fields];
     }
 
-    public function edit($requestData, $fields, $modelData){
-        $fieldsInfo = $this->getFieldTypes($fields);
-        foreach($requestData as $value){
+    
+    public function generateHashCode($fieldsInfo, $isEdit=false){
+        $variableName = $isEdit ? "\$toUpdate" : "\$toStore";
+        $requiredHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['required']);
+        $optionalHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['optional']);
 
-            $functionTop = $this->getFunctionParams($value);
-            $updateFieldString = $this->getArrayString("updateFields", $value->fields, "list");
-            $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+        if($isEdit){
+            $hashes = $optionalHash + $requiredHash;
+            $allHash = $this->getArrayString("", $hashes, "list", false);
+            if(count($hashes) == 0){
+                return "";
+            }
             
-            
-            $toReturn = <<<text
-            $functionTop
-            {
-                $updateFieldString
-                \$toUpdate = [];
-                foreach(\$updateFields as \$value){
-                    if(\$request->get(\$value) != null){
-                        \$toUpdate[\$value] = \$request->get(\$value);
-                    }
+            return <<<text
+                if (in_array(\$value, $allHash)) {
+                    \$toUpdate[\$value] = Hash::make(\$request->get(\$value));
+                    continue;
                 }
-                $modelData->tableName::{$whereClause}update(\$toUpdate);
-                return ["Success" => true]; 
+            text;
+        }
+        $optionalString = $this->getArrayString("", $optionalHash, "list", false);
+        $requiredString = $this->getArrayString("", $requiredHash, "list", false);
+        
+        $optionalReturn = <<<text
+        if(in_array(\$optionalField[\$i], $optionalString)){
+            {$variableName}[\$optionalField[\$i]] = Hash::make(\$request->get(\$optionalField[\$i]));
+            continue;
+        }
+        text;
+        
+        $requiredReturn = <<<text
+        if(in_array(\$mustHave[\$i], $requiredString)){
+            {$variableName}[\$mustHave[\$i]] = Hash::make(\$request->get(\$mustHave[\$i]));
+            continue;
+        }
+        text;       
+
+        if(count($optionalHash) == 0){
+            $optionalReturn = "";
+        }
+        if(count($requiredHash) == 0){
+            $requiredReturn = "";
+        }
+       return ["optionalHash" => $optionalReturn, "requiredHash" => $requiredReturn];
+    }
+
+    public function generateUploadCode($fieldsInfo, $isEdit = false){
+        $requiredImage = array_intersect($fieldsInfo['image'], $fieldsInfo['required']);
+        $optionalImage = array_intersect($fieldsInfo['image'], $fieldsInfo['optional']);
+        
+        $allImages = $requiredImage + $optionalImage;
+        $editArray = $this->getArrayString("", $allImages, "list", false);
+        if($isEdit){
+            return <<<text
+            foreach($editArray as \$value){
+                if (\$request->file(\$value) != null) {
+                    \$imageName = time().'.'.\$request->file(\$value)->extension();  
+                    \$request->file(\$value)->move(public_path(\$value), \$imageName);
+                    \$nameToStore= "http://".request()->getHttpHost()."/img/\$imageName";
+                    \$toUpdate[\$value] = \$nameToStore;
+                    continue;
+                }
             }
             text;
-            $this->replaceFunction($value->request->name, $toReturn);
         }
+
+        $optionalArray = $this->getArrayString("", $optionalImage, "list", false);
+        $requiredArray = $this->getArrayString("", $requiredImage, "list", false);
+        
+        foreach(["mustHave", "optionalField"] as $value){
+            $$value = <<<text
+            if (in_array(\${$value}[\$i], $requiredArray)) {
+                \$imageName = time().'.'.\$request->file(\${$value}[\$i])->extension();  
+                \$request->file(\${$value}[\$i])->move(public_path(\${$value}[\$i]), \$imageName);
+                \$nameToStore= "http://".request()->getHttpHost()."/img/\$imageName";
+                \$toStore[\${$value}[\$i]] = \$nameToStore;
+                continue;
+            }
+            text;
+        } 
+ 
+       
+        if(count($requiredImage) == 0){
+            $mustHave = "";
+        }
+        if(count($optionalImage) == 0){
+            $optionalField = "";
+        }
+        return ["requiredImage" => $mustHave, "optionalImage" => $optionalField];
     }
 
     public function add($requestData, $fields, $modelData){
@@ -167,20 +238,15 @@ class Controller{
             $optionalString = $this->getArrayString("optionalField", $optionalFields, "list");
             $requiredString = $this->getArrayString("mustHave", $requiredFields, "list");
             
-            $optionalHashString = ""; 
-            $requiredHashString = "";
+            
+            $additionalCode = '';
 
             if ( array_key_exists('hash', $fieldsInfo) ) {
-                $optionalHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['optional']);
-                $requiredHash = array_intersect($fieldsInfo['hash'], $fieldsInfo['required']);
-                foreach($requiredHash as $data){
-                    $requiredHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
-                }
-                foreach($optionalHash as $data){
-                    $optionalHashString .= "\$toStore['$data'] = Hash::make(\$toStore['$data']);\n";
-                }
+                $additionalHashCode = $this->generateHashCode($fieldsInfo);
             }
-           
+            if(array_key_exists('image', $fieldsInfo)){
+                $additionalImageCode = $this->generateUploadCode($fieldsInfo);
+              }
 
             $toReturn = <<<text
                 $functionTop { 
@@ -190,13 +256,15 @@ class Controller{
                     \$toStore = [];
                     for(\$i = 0; \$i < count(\$mustHave); \$i++){
                         \$toValidate[\$mustHave[\$i]] = ['required'];
+                        {$additionalHashCode['requiredHash']}
+                        {$additionalImageCode['requiredImage']}
                         \$toStore[\$mustHave[\$i]] = \$request->get(\$mustHave[\$i]);
                     }
                     for(\$i = 0; \$i < count(\$optionalField); \$i++){
+                        {$additionalHashCode['optionalHash']}
+                        {$additionalImageCode['optionalImage']}
                         \$toStore[\$optionalField[\$i]] = \$request->get(\$optionalField[\$i]);
                     }
-                    $requiredHashString
-                    $optionalHashString
                     $modelData->tableName::insert(\$toStore);
                     return ["Success" => true]; 
                 }
@@ -204,7 +272,43 @@ class Controller{
                 $this->replaceFunction($value->request->name, $toReturn);
             }
     }
-    
+    public function edit($requestData, $fields, $modelData){
+        $fieldsInfo = $this->getFieldTypes($fields);
+        foreach($requestData as $value){
+
+            $functionTop = $this->getFunctionParams($value);
+            $updateFieldString = $this->getArrayString("updateFields", $value->fields, "list");
+            $whereClause = $this->getRouteParam($value->request->route)["whereClause"];
+            
+            $hashCode = '';
+
+            if ( array_key_exists('hash', $fieldsInfo) ) {
+              $hashCode = $this->generateHashCode($fieldsInfo, true);
+            }
+            if ( array_key_exists('image', $fieldsInfo) ) {
+                $additionalImageCode = $this->generateUploadCode($fieldsInfo, true);
+              }
+
+            
+            $toReturn = <<<text
+            $functionTop
+            {
+                $updateFieldString
+                \$toUpdate = [];
+                $additionalImageCode
+                foreach(\$updateFields as \$value){
+                    if(\$request->get(\$value) != null){
+                        $hashCode
+                        \$toUpdate[\$value] = \$request->get(\$value);
+                    }
+                }
+                $modelData->tableName::{$whereClause}update(\$toUpdate);
+                return ["Success" => true]; 
+            }
+            text;
+            $this->replaceFunction($value->request->name, $toReturn);
+        }
+    }
     public function delete($requestData, $fields, $modelData){
         foreach($requestData as $value){
             $functionTop = $this->getFunctionParams($value);
@@ -231,6 +335,8 @@ class Controller{
 
             if (strpos($value, "hash") !== false){
                 $toReturn["hash"][] = $key;
+            }else if(strpos($value, "image") !== false){
+                $toReturn["image"][] = $key;
             }
             
         }

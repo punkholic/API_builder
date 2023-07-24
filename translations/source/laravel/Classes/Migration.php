@@ -70,6 +70,7 @@ class Migration{
     private function processFields($fields, $tableName, $timestamps){
         $typeChange = [
             "primary" => "increments('PASSED_DATA')",
+            "image" => "string('PASSED_DATA')",
             "string" => "string('PASSED_DATA')",
             "integer" => "integer('PASSED_DATA')",
             "text" => "text('PASSED_DATA')",
