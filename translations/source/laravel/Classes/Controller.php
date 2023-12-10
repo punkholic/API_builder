@@ -193,7 +193,7 @@ class Controller{
             foreach($editArray as \$value){
                 if (\$request->file(\$value) != null) {
                     \$imageName = time().'.'.\$request->file(\$value)->extension();  
-                    \$request->file(\$value)->move(public_path(\$value), \$imageName);
+                    \$request->file(\$value)->move(public_path('img'), \$imageName);
                     \$nameToStore= "http://".request()->getHttpHost()."/img/\$imageName";
                     \$toUpdate[\$value] = \$nameToStore;
                     continue;
@@ -202,14 +202,14 @@ class Controller{
             text;
         }
 
-        $optionalArray = $this->getArrayString("", $optionalImage, "list", false);
-        $requiredArray = $this->getArrayString("", $requiredImage, "list", false);
+        // $optionalArray = $this->getArrayString("", $optionalImage, "list", false);
+        $imageData = $this->getArrayString("", $allImages, "list", false);
         
         foreach(["mustHave", "optionalField"] as $value){
             $$value = <<<text
-            if (in_array(\${$value}[\$i], $requiredArray)) {
+            if (in_array(\${$value}[\$i], $imageData)) {
                 \$imageName = time().'.'.\$request->file(\${$value}[\$i])->extension();  
-                \$request->file(\${$value}[\$i])->move(public_path(\${$value}[\$i]), \$imageName);
+                \$request->file(\${$value}[\$i])->move(public_path('img'), \$imageName);
                 \$nameToStore= "http://".request()->getHttpHost()."/img/\$imageName";
                 \$toStore[\${$value}[\$i]] = \$nameToStore;
                 continue;
@@ -231,23 +231,22 @@ class Controller{
         $fieldsInfo = $this->getFieldTypes($fields);
         foreach($requestData as $value){
             $functionTop = $this->getFunctionParams($value);
-
+            
             $optionalFields = array_intersect($value->fields, $fieldsInfo['optional']);
             $requiredFields = array_intersect($value->fields, $fieldsInfo['required']);
-
+            
             $optionalString = $this->getArrayString("optionalField", $optionalFields, "list");
             $requiredString = $this->getArrayString("mustHave", $requiredFields, "list");
             
             
-            $additionalCode = '';
-
+            $additionalImageCode = '';
+            $additionalHashCode = ['requiredHash' => '', 'optionalHash' => ''];
             if ( array_key_exists('hash', $fieldsInfo) ) {
                 $additionalHashCode = $this->generateHashCode($fieldsInfo);
             }
             if(array_key_exists('image', $fieldsInfo)){
                 $additionalImageCode = $this->generateUploadCode($fieldsInfo);
-              }
-
+            }
             $toReturn = <<<text
                 $functionTop { 
                     $optionalString
@@ -263,7 +262,7 @@ class Controller{
                     for(\$i = 0; \$i < count(\$optionalField); \$i++){
                         {$additionalHashCode['optionalHash']}
                         {$additionalImageCode['optionalImage']}
-                        \$toStore[\$optionalField[\$i]] = \$request->get(\$optionalField[\$i]);
+                        \$toStore[\$optionalField[\$i]] = \$request->get('img');
                     }
                     $modelData->tableName::insert(\$toStore);
                     return ["Success" => true]; 
